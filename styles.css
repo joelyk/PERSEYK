@@ -83,6 +83,17 @@ body {
   margin: 26px auto 48px;
 }
 
+.site-footer {
+  width: min(1080px, calc(100% - 28px));
+  margin: 0 auto 26px;
+  border-top: 1px solid #ffffff8a;
+  padding-top: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
 .panel {
   border: 1px solid var(--stroke);
   border-radius: 22px;
