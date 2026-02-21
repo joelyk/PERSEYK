@@ -1567,6 +1567,178 @@
     )
   );
 
+  var hardBlock2ExamTrapQuestions = [];
+
+  hardBlock2ExamTrapQuestions.push(
+    makeQuestion(
+      "iot-c1-hb2c-q51",
+      "Un campus veut deployer 300 capteurs temperature sur plusieurs batiments. Besoins: batterie, indoor, message toutes les 30 secondes, maillage, sans abonnement operateur. Meilleur choix ?",
+      "A campus wants to deploy 300 temperature sensors across multiple buildings. Requirements: battery-powered, indoor, frequent communication (every 30 seconds), mesh desired, no operator subscription. Best choice?",
+      [
+        makeOption("a", "LoRaWAN public network", "LoRaWAN public est longue portee/faible debit; 300 noeuds toutes les 30 s peut saturer inutilement en indoor.", "LoRaWAN public is long-range/low-throughput; 300 nodes every 30s can overload duty cycle and is unnecessary indoors."),
+        makeOption("b", "ZigBee mesh"),
+        makeOption("c", "Sigfox", "Sigfox limite la frequence uplink et le payload; inapte aux mises a jour tres frequentes.", "Sigfox has limited uplink frequency and small payload; not suitable for frequent updates."),
+        makeOption("d", "LTE-M", "LTE-M demande abonnement operateur et est surdimensionne pour un mesh local indoor.", "LTE-M requires operator subscription and is overkill for local indoor mesh.")
+      ],
+      "b",
+      "ZigBee supporte l indoor, le maillage, les messages frequents de petite taille et un deploiement prive sans operateur.",
+      "ZigBee supports indoor deployments, mesh topology, frequent small messages, and private deployment without operator subscription."
+    )
+  );
+
+  hardBlock2ExamTrapQuestions.push(
+    makeQuestion(
+      "iot-c1-hb2c-q52",
+      "Une architecture Cloud-only est choisie pour un systeme de securite. Quel risque cache est le plus critique ?",
+      "A design chooses Cloud-only architecture for a safety system. Which hidden risk is most critical?",
+      [
+        makeOption("a", "Too much local storage", "Le stockage local n est pas le risque principal dans un design cloud-only.", "Local storage is not the primary issue in cloud-only design."),
+        makeOption("b", "Loss of Internet connectivity"),
+        makeOption("c", "Sensor overheating", "La surchauffe est un probleme materiel, pas le risque architectural central ici.", "Overheating is a hardware issue, not the main architectural risk here."),
+        makeOption("d", "Dashboard color mismatch", "Le design UI n est pas un risque securite critique.", "UI color mismatch does not affect core safety behavior.")
+      ],
+      "b",
+      "Cloud-only depend entierement d Internet; si la connectivite tombe, l alerte peut ne jamais partir.",
+      "Cloud-only depends fully on internet; if connectivity fails, safety alerts may never trigger."
+    )
+  );
+
+  hardBlock2ExamTrapQuestions.push(
+    makeQuestion(
+      "iot-c1-hb2c-q53",
+      "Quel scenario justifie un LoRaWAN prive au lieu d un Sigfox operateur ?",
+      "Which scenario JUSTIFIES a private LoRaWAN network instead of operator Sigfox?",
+      [
+        makeOption("a", "Parcel tracking nationwide", "Le suivi colis national correspond plutot a un reseau operateur large couverture.", "Nationwide parcel tracking generally fits operator wide-area networks."),
+        makeOption("b", "Agricultural sensors on a remote farm without operator coverage"),
+        makeOption("c", "Smartwatch communication", "Les montres utilisent surtout BLE avec smartphone.", "Smartwatch communication is typically BLE to smartphone."),
+        makeOption("d", "HD video monitoring", "La video HD demande un haut debit, pas LoRaWAN/Sigfox.", "HD video needs high throughput, not LoRaWAN/Sigfox.")
+      ],
+      "b",
+      "Sans couverture operateur, le prive LoRaWAN permet de deployer sa propre gateway et de garder l autonomie reseau.",
+      "If operator coverage is absent, private LoRaWAN lets you deploy your own gateway and keep network autonomy."
+    )
+  );
+
+  hardBlock2ExamTrapQuestions.push(
+    makeQuestion(
+      "iot-c1-hb2c-q54",
+      "Quel KPI mesure le mieux la scalabilite d un systeme ?",
+      "Which KPI best measures system scalability?",
+      [
+        makeOption("a", "Number of sensors supported without redesign"),
+        makeOption("b", "Color of enclosure", "Aucun lien avec la scalabilite.", "Not related to scalability."),
+        makeOption("c", "Battery brand", "Aucun lien direct avec la capacite de passage a l echelle.", "No direct relation to scaling capacity."),
+        makeOption("d", "Room decoration", "Aucun lien avec la scalabilite.", "Not related to scalability.")
+      ],
+      "a",
+      "La scalabilite se mesure par la capacite du systeme a absorber plus d appareils sans refonte majeure.",
+      "Scalability is measured by how many devices the system can support without major redesign."
+    )
+  );
+
+  hardBlock2ExamTrapQuestions.push(
+    makeQuestion(
+      "iot-c1-hb2c-q55",
+      "Pourquoi LPWAN est inapte au streaming video HD ?",
+      "Why is LPWAN unsuitable for HD video streaming?",
+      [
+        makeOption("a", "Too much encryption", "Le chiffrement n est pas la cause principale de la limite video.", "Encryption is not the primary issue for HD video limits."),
+        makeOption("b", "Too low data rate"),
+        makeOption("c", "Too high power", "LPWAN est justement basse consommation.", "LPWAN is actually low power."),
+        makeOption("d", "Too many antennas", "Le nombre d antennes n explique pas l inaptitude au streaming HD.", "Antenna count is irrelevant to this HD streaming limitation.")
+      ],
+      "b",
+      "LPWAN offre quelques kbps alors que la video HD demande plutot des Mbps.",
+      "LPWAN provides only a few kbps, while HD video typically requires Mbps."
+    )
+  );
+
+  hardBlock2ExamTrapQuestions.push(
+    makeQuestion(
+      "iot-c1-hb2c-q56",
+      "Dans un maillage ZigBee dense, pourquoi certains noeuds consomment-ils plus ?",
+      "In a dense ZigBee mesh, why might some nodes consume more energy?",
+      [
+        makeOption("a", "They act as routers relaying traffic"),
+        makeOption("b", "They have bigger screens", "Les capteurs IoT n ont generalement pas d ecran; ce n est pas la cause principale.", "Typical sensors have no screens; this is not the main factor."),
+        makeOption("c", "They use HDMI", "HDMI est hors sujet dans ce contexte IoT capteurs.", "HDMI is irrelevant in this IoT sensor context."),
+        makeOption("d", "They are encrypted twice", "Le chiffrement ajoute du cout CPU, mais le routage radio reste la cause dominante.", "Encryption adds CPU cost, but traffic relaying is the dominant energy factor.")
+      ],
+      "a",
+      "Les routeurs mesh relaient le trafic des autres noeuds, gardent la radio active plus souvent et consomment davantage.",
+      "Mesh router nodes relay traffic for others, keep radios active longer, and consume more energy."
+    )
+  );
+
+  hardBlock2ExamTrapQuestions.push(
+    makeQuestion(
+      "iot-c1-hb2c-q57",
+      "Quelle est la meilleure justification de l Edge dans un systeme CO2 en salle de classe ?",
+      "Which is the BEST justification for Edge computing in a classroom CO2 system?",
+      [
+        makeOption("a", "To increase cloud storage", "Le stockage est surtout un role cloud.", "Storage growth is mostly a cloud concern."),
+        makeOption("b", "To ensure alerts even without Internet"),
+        makeOption("c", "To replace sensors", "L edge ne remplace pas les capteurs; il traite leurs donnees.", "Edge does not replace sensors; it processes their data."),
+        makeOption("d", "To eliminate security", "La securite reste indispensable.", "Security is still required.")
+      ],
+      "b",
+      "L edge permet detection locale du seuil et declenchement d alerte meme si le lien internet tombe.",
+      "Edge enables local threshold detection and alerting even when internet connectivity fails."
+    )
+  );
+
+  hardBlock2ExamTrapQuestions.push(
+    makeQuestion(
+      "iot-c1-hb2c-q58",
+      "Quelle famille reseau est la plus adaptee a la detection de proximite wearable ?",
+      "Which network family is MOST appropriate for wearable proximity detection?",
+      [
+        makeOption("a", "BLE (PAN)"),
+        makeOption("b", "LPWAN", "LPWAN est trop longue portee et non natif smartphone pour proximite fine.", "LPWAN is too long-range and not smartphone-native for fine proximity."),
+        makeOption("c", "Satellite", "Le satellite est inutile pour la proximite wearable.", "Satellite is unnecessary for wearable proximity."),
+        makeOption("d", "Fiber", "La fibre est une infrastructure filaire, pas une liaison wearable de proximite.", "Fiber is wired infrastructure, not wearable proximity networking.")
+      ],
+      "a",
+      "BLE est optimise pour courte portee, faible consommation et appareils personnels.",
+      "BLE is optimized for short range, low power, and personal devices."
+    )
+  );
+
+  hardBlock2ExamTrapQuestions.push(
+    makeQuestion(
+      "iot-c1-hb2c-q59",
+      "Quel est un vrai risque d interoperabilite ?",
+      "Which is a real interoperability risk?",
+      [
+        makeOption("a", "Devices from different vendors using proprietary protocols"),
+        makeOption("b", "Using open standards like MQTT", "Les standards ouverts ameliorent l interop.", "Open standards generally improve interoperability."),
+        makeOption("c", "Using IP", "IP facilite la compatibilite entre systemes.", "IP usually improves cross-system compatibility."),
+        makeOption("d", "Using encryption", "Le chiffrement traite la securite, pas un blocage d interop en soi.", "Encryption is a security mechanism, not by itself an interoperability blocker.")
+      ],
+      "a",
+      "Des protocoles proprietaires heterogenes empechent souvent l integration multi-fournisseurs.",
+      "Heterogeneous proprietary protocols often block multi-vendor integration."
+    )
+  );
+
+  hardBlock2ExamTrapQuestions.push(
+    makeQuestion(
+      "iot-c1-hb2c-q60",
+      "Quelle architecture finale est la plus robuste pour un smart campus ?",
+      "Which final architecture is MOST robust for a smart campus?",
+      [
+        makeOption("a", "100% Cloud-only", "Risque de dependance internet et latence accrue pour actions locales.", "Internet dependency and higher latency for local actions are major risks."),
+        makeOption("b", "Edge + Cloud hybrid"),
+        makeOption("c", "LPWAN-only for everything", "LPWAN seul ne couvre pas tous les besoins (video, controle interactif, etc.).", "LPWAN-only cannot handle all workloads (video, interactive control, etc.)."),
+        makeOption("d", "Wi-Fi-only without segmentation", "Tout en Wi-Fi non segmente augmente congestion, risques et consommation.", "Unsegmented Wi-Fi-only increases congestion, risk, and power usage.")
+      ],
+      "b",
+      "L hybride Edge + Cloud apporte reactivite locale, reduction de trafic, analytique globale et meilleure resilience.",
+      "Edge + Cloud hybrid provides local reactivity, reduced bandwidth, global analytics, and stronger resilience."
+    )
+  );
+
   window.PERSYK_DATA = {
     siteName: "PERSEYK",
     themes: [
@@ -1578,7 +1750,7 @@
           {
             id: "iot-cours-1",
             name: "Cours 1 - Foundations",
-            description: "Easy Block 1-2, Medium Block 1-2 (+ Set B), Medium-Difficult 2026, Difficult Block 1-2 (+ Set B) (90 QCM).",
+            description: "Easy Block 1-2, Medium Block 1-2 (+ Set B), Medium-Difficult 2026, Difficult Block 1-2 (+ Set B), Hard Block 2 Exam Trap (100 QCM).",
             blocks: [
               {
                 id: "iot-cours-1-easy-block-1",
@@ -1619,6 +1791,11 @@
                 id: "iot-cours-1-hard-block-1-set-b",
                 name: "Hard Block 1 - Set B - 10 QCM",
                 questions: hardBlock1SetBQuestions
+              },
+              {
+                id: "iot-cours-1-hard-block-2-exam-trap",
+                name: "Hard Block 2 - Exam Trap - 10 QCM",
+                questions: hardBlock2ExamTrapQuestions
               },
               {
                 id: "iot-cours-1-difficult-block-2",
