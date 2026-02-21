@@ -1,4 +1,4 @@
-# PERSEYK
+# PERSEYK 🚀
 
 Plateforme web d'apprentissage IoT en HTML/CSS/JavaScript natif (sans backend), avec:
 
@@ -13,7 +13,7 @@ Le projet reste simple a deployer (fichiers statiques) et simple a enrichir avec
 
 ---
 
-## 1) Objectif pedagogique
+## 1) 🎯 Objectif pedagogique
 
 PERSEYK organise l'apprentissage en:
 
@@ -29,7 +29,7 @@ Chaque question est explicative:
 
 ---
 
-## 2) Etat actuel du contenu
+## 2) 📌 Etat actuel du contenu
 
 Version actuelle:
 
@@ -41,15 +41,15 @@ Version actuelle:
 
 ---
 
-## 3) Fonctionnalites principales
+## 3) ⚙️ Fonctionnalites principales
 
-### Auth locale (sans backend)
+### 🔐 Auth locale (sans backend)
 
 - saisie du nom utilisateur
 - stockage local via localStorage
 - message d'accueil personnalise
 
-### Parcours QCM
+### 🧠 Parcours QCM
 
 - affichage question FR + EN
 - options A/B/C/D
@@ -58,14 +58,14 @@ Version actuelle:
 - detail complet des explications (bonne et mauvaises options)
 - bouton "Question suivante" visible seulement quand la question est resolue
 
-### Resultat de fin de bloc
+### 📊 Resultat de fin de bloc
 
 - score total
 - nombre de QCM rates
 - listing detaille des erreurs
 - bonne reponse + explication pour chaque question ratee
 
-### Etudes de cas
+### 🧪 Etudes de cas
 
 Chaque case study contient:
 
@@ -77,14 +77,14 @@ Chaque case study contient:
 - schema architecture (ASCII + graphe JS)
 - graphique KPI
 
-### Graphiques JS
+### 📈 Graphiques JS
 
 - Chart.js pour les KPI
 - Cytoscape.js pour les schemas d'architecture
 
 ---
 
-## 4) Stack technique
+## 4) 🧱 Stack technique
 
 - Frontend: HTML5, CSS3, JavaScript vanilla
 - Data: data.js (objet JS global)
@@ -94,7 +94,7 @@ Chaque case study contient:
 
 ---
 
-## 5) Structure des fichiers
+## 5) 🗂️ Structure des fichiers
 
 ```txt
 Perseyk/
@@ -107,7 +107,7 @@ Perseyk/
 
 ---
 
-## 6) Architecture logique
+## 6) 🏗️ Architecture logique
 
 Flux utilisateur:
 
@@ -131,7 +131,7 @@ Etat applicatif principal (dans app.js):
 
 ---
 
-## 7) Regles metier QCM
+## 7) 📚 Regles metier QCM
 
 ### Tentatives
 
@@ -153,7 +153,7 @@ Chaque question contient:
 
 ---
 
-## 8) Modele de donnees (data.js)
+## 8) 🧾 Modele de donnees (data.js)
 
 Hierarchie:
 
@@ -226,7 +226,7 @@ themes[]
 
 ---
 
-## 9) Graphiques et schemas
+## 9) 🛰️ Graphiques et schemas
 
 ### Chart.js
 
@@ -241,7 +241,7 @@ themes[]
 
 ---
 
-## 10) Execution locale
+## 10) ▶️ Execution locale
 
 Projet statique, plusieurs options:
 
@@ -253,7 +253,7 @@ Projet statique, plusieurs options:
 
 ---
 
-## 11) Ajouter de nouveaux contenus
+## 11) ➕ Ajouter de nouveaux contenus
 
 ### Ajouter un bloc QCM
 
@@ -283,7 +283,7 @@ node --check app.js
 
 ---
 
-## 12) Qualite et design
+## 12) 🎨 Qualite et design
 
 - interface responsive desktop/mobile
 - rendu bilingue FR/EN
@@ -292,7 +292,7 @@ node --check app.js
 
 ---
 
-## 13) Roadmap possible
+## 13) 🛣️ Roadmap possible
 
 - multi-themes supplementaires
 - export resultat PDF/CSV
@@ -303,6 +303,7 @@ node --check app.js
 
 ---
 
-## 14) Credit
+## 14) 👤 Auteur
 
-Fait par YANKAM Ngueguim Joel Stephane
+**YANKAM Ngueguim Joel Stephane**  
+Concepteur et realisateur du projet **PERSEYK**.
