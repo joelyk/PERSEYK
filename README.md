@@ -11,6 +11,8 @@ Plateforme web d'apprentissage IoT en HTML/CSS/JavaScript natif (sans backend), 
 
 Le projet reste simple a deployer (fichiers statiques) et simple a enrichir avec de nouveaux contenus.
 
+👤 **Auteur:** YANKAM Ngueguim Joel Stephane
+
 ---
 
 ## 1) 🎯 Objectif pedagogique
