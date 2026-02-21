@@ -586,6 +586,8 @@
       "<section class=\"panel\">" +
       "<h2 class=\"title\">Connexion locale</h2>" +
       "<p class=\"subtitle\">Entre ton nom pour commencer les QCM sur PERSEYK.</p>" +
+      "<p class=\"intro-note\">PERSEYK est une plateforme de QCM et d etudes de cas IoT avec feedback complet FR/EN.</p>" +
+      "<p class=\"intro-author\">Auteur: YANKAM Ngueguim Joel Stephane</p>" +
       "<div class=\"spacer-20\"></div>" +
       "<form id=\"login-form\" class=\"login-form\">" +
       "<label class=\"field-label\" for=\"username-input\">Nom</label>" +

@@ -277,6 +277,27 @@ body {
   font-size: 13px;
 }
 
+.intro-note {
+  margin: 8px 0 0;
+  color: #3d5a63;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.intro-author {
+  margin: 8px 0 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border: 1px solid #bfd8d5;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f3faf9, #edf7f6);
+  color: #1a4e55;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .quiz-header {
   display: grid;
   gap: 8px;
