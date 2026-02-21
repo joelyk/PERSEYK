@@ -1739,6 +1739,556 @@
     )
   );
 
+  var caseStudiesCours1 = [
+    {
+      id: "iot-c1-case-1",
+      title: "Case Study 1 - Smart Classroom Air Quality & Comfort",
+      context: {
+        en: "CESI notices several classrooms feel heavy during lessons. Students report fatigue and low concentration. Windows are opened randomly, and heating stays on even when rooms are empty.",
+        fr: "Le CESI constate que plusieurs salles deviennent etouffantes pendant les cours. Les etudiants se plaignent de fatigue et baisse de concentration. Les fenetres sont ouvertes au hasard et le chauffage reste parfois actif en salle vide."
+      },
+      objectives: {
+        en: [
+          "Monitor CO2, temperature, and occupancy.",
+          "Trigger an alert in under 10 seconds when CO2 is too high.",
+          "Store history to improve ventilation/heating schedules.",
+          "Deploy in 20 rooms."
+        ],
+        fr: [
+          "Surveiller CO2, temperature et occupation.",
+          "Declencher une alerte en moins de 10 secondes si CO2 trop eleve.",
+          "Conserver l historique pour optimiser ventilation/chauffage.",
+          "Deployer dans 20 salles."
+        ]
+      },
+      constraints: {
+        en: [
+          "Battery-powered sensors when possible (low maintenance).",
+          "Indoor environment with walls that may block signals.",
+          "Campus Wi-Fi exists but can be congested.",
+          "Occupancy data may be privacy-sensitive."
+        ],
+        fr: [
+          "Capteurs sur batterie si possible (maintenance reduite).",
+          "Environnement interieur avec murs bloquants.",
+          "Wi-Fi campus disponible mais parfois sature.",
+          "Donnees d occupation sensibles (vie privee)."
+        ]
+      },
+      questions: [
+        {
+          id: "iot-c1-case1-q1",
+          prompt: {
+            en: "Identify the 3 most critical constraints and justify them.",
+            fr: "Identifier les 3 contraintes les plus critiques et les justifier."
+          },
+          correction: {
+            en: [
+              "Latency constraint: alerts must be under 10s, so decisions should be local (Edge).",
+              "Energy constraint: battery sensors must last long to avoid frequent maintenance across 20 rooms.",
+              "Network reliability/coverage: indoor walls and Wi-Fi congestion require a robust local network (mesh or gateway)."
+            ],
+            fr: [
+              "Latence: alerte <10s, donc decision locale (Edge).",
+              "Energie: capteurs batterie avec autonomie longue pour limiter maintenance sur 20 salles.",
+              "Reseau/couverture: murs + Wi-Fi sature, besoin d un reseau local robuste (maillage/passerelle)."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case1-q2",
+          prompt: {
+            en: "Propose at least 2 SMART requirements.",
+            fr: "Proposer au moins 2 exigences SMART."
+          },
+          correction: {
+            en: [
+              "Trigger a ventilation alert if CO2 > 1000 ppm for 3 minutes during class hours in Room X.",
+              "Turn off heating if no occupancy is detected for 15 minutes and temperature is above 19C."
+            ],
+            fr: [
+              "Declencher une alerte si CO2 > 1000 ppm pendant 3 minutes pendant les cours en Salle X.",
+              "Couper le chauffage si absence detectee pendant 15 minutes et temperature > 19C."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case1-q3",
+          prompt: {
+            en: "Which network family is best inside a building: ZigBee, LoRaWAN, or Wi-Fi? Justify.",
+            fr: "Quelle famille reseau est la meilleure en batiment: ZigBee, LoRaWAN ou Wi-Fi ? Justifier."
+          },
+          correction: {
+            en: [
+              "ZigBee is typically best (or ZigBee + Wi-Fi via gateway): indoor, many sensors, low power, mesh helps room-to-room coverage.",
+              "LoRaWAN is overkill for a single building and lower throughput.",
+              "Wi-Fi tends to drain battery-powered sensors."
+            ],
+            fr: [
+              "ZigBee est en general le meilleur (ou ZigBee + Wi-Fi via passerelle): interieur, nombreux capteurs, faible conso, maillage utile.",
+              "LoRaWAN est surdimensionne pour un seul batiment et faible debit.",
+              "Wi-Fi consomme trop pour des capteurs batterie."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case1-q4",
+          prompt: {
+            en: "Where should processing happen (Cloud / Edge / Hybrid) and why?",
+            fr: "Ou le traitement doit-il se faire (Cloud / Edge / Hybride) et pourquoi ?"
+          },
+          correction: {
+            en: [
+              "Hybrid Edge + Cloud.",
+              "Edge: fast local alert decisions (<10s), still works if internet fails.",
+              "Cloud: long-term analytics and dashboards."
+            ],
+            fr: [
+              "Hybride Edge + Cloud.",
+              "Edge: alertes rapides locales (<10s), operation meme si internet tombe.",
+              "Cloud: historique long terme, analytics et dashboards."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case1-q5",
+          prompt: {
+            en: "Give 2 KPIs to evaluate success.",
+            fr: "Donner 2 KPI pour evaluer le succes."
+          },
+          correction: {
+            en: [
+              "Alert response time (seconds).",
+              "Messages/day per room (network load).",
+              "Optional: battery life estimate, CO2 time above threshold per week."
+            ],
+            fr: [
+              "Delai d alerte (secondes).",
+              "Messages/jour par salle (charge reseau).",
+              "Optionnel: autonomie batterie estimee, temps CO2 au-dessus seuil par semaine."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case1-q6",
+          prompt: {
+            en: "Security baseline: propose 2 measures (ETSI mindset).",
+            fr: "Baseline securite: proposer 2 mesures (esprit ETSI)."
+          },
+          correction: {
+            en: [
+              "No default passwords; unique credentials per device.",
+              "Secure OTA updates + encrypted communication (TLS where applicable)."
+            ],
+            fr: [
+              "Pas de mot de passe par defaut; identifiants uniques par appareil.",
+              "Mises a jour OTA securisees + communications chiffrees (TLS si applicable)."
+            ]
+          }
+        }
+      ],
+      architectureAscii: [
+        "[CO2/Temp/Occupancy Sensors]",
+        "        |",
+        "     (ZigBee Mesh)",
+        "        |",
+        "[ZigBee Coordinator / Gateway]",
+        "        |",
+        "   (IP Network: Ethernet/Wi-Fi)",
+        "        |",
+        "[Edge Logic: thresholds, local alerts]",
+        "        |",
+        "     (MQTT Publish)",
+        "        |",
+        "[Cloud Storage + Dashboard/Analytics]"
+      ].join("\n"),
+      reasoning: {
+        en: [
+          "Classify needs: fast alerts + historical analytics.",
+          "Derive constraints: latency <10s, battery life, indoor coverage, privacy.",
+          "Choose network: ZigBee for indoor mesh + low power.",
+          "Choose architecture: Hybrid (Edge for alerts, Cloud for history).",
+          "Define KPIs: alert time, messages/day, battery estimate.",
+          "Apply baseline security: credentials, updates, encryption."
+        ],
+        fr: [
+          "Classer les besoins: alertes rapides + historique analytique.",
+          "Deriver les contraintes: latence <10s, autonomie, couverture indoor, vie privee.",
+          "Choisir reseau: ZigBee pour maillage indoor basse conso.",
+          "Choisir architecture: Hybride (Edge pour alertes, Cloud pour historique).",
+          "Definir KPI: temps d alerte, messages/jour, estimation batterie.",
+          "Appliquer baseline securite: identifiants, mises a jour, chiffrement."
+        ]
+      },
+      chart: {
+        type: "bar",
+        title: "Case 1 KPI Snapshot",
+        labels: ["Target Alert s", "Measured Alert s", "Target Energy %", "Measured Energy %"],
+        data: [10, 6, 20, 28]
+      }
+    },
+    {
+      id: "iot-c1-case-2",
+      title: "Case Study 2 - Outdoor Environmental Monitoring (Campus-wide)",
+      context: {
+        en: "CESI wants outdoor monitoring across campus: temperature, humidity, and noise near entrances. Campus width is around 2 km. Sensors should last 3 years on battery and send data every 15 minutes. No critical real-time alert is required, but reliability is important.",
+        fr: "Le CESI veut surveiller l exterieur du campus: temperature, humidite et bruit pres des entrees. Le campus fait environ 2 km de large. Les capteurs doivent tenir 3 ans sur batterie et envoyer toutes les 15 minutes. Pas d alerte critique temps reel, mais fiabilite requise."
+      },
+      objectives: {
+        en: [
+          "Campus-wide outdoor environmental visibility.",
+          "3-year battery objective.",
+          "Reliable periodic telemetry every 15 minutes.",
+          "Scale to 150 sensors under budget."
+        ],
+        fr: [
+          "Visibilite environnementale outdoor a l echelle campus.",
+          "Objectif autonomie batterie 3 ans.",
+          "Telemetrie periodique fiable toutes les 15 minutes.",
+          "Scalabilite a 150 capteurs avec budget contraint."
+        ]
+      },
+      constraints: {
+        en: [
+          "Weak Wi-Fi in some areas.",
+          "Limited budget.",
+          "Need to scale to 150 sensors."
+        ],
+        fr: [
+          "Wi-Fi faible a certains emplacements.",
+          "Budget limite.",
+          "Montee en charge a 150 capteurs."
+        ]
+      },
+      questions: [
+        {
+          id: "iot-c1-case2-q1",
+          prompt: {
+            en: "Best network family: Wi-Fi, ZigBee, or LPWAN (LoRaWAN/NB-IoT)?",
+            fr: "Meilleure famille reseau: Wi-Fi, ZigBee ou LPWAN (LoRaWAN/NB-IoT) ?"
+          },
+          correction: {
+            en: [
+              "LPWAN (often LoRaWAN) is best: long range, low power, periodic small payloads, good for 3-year battery.",
+              "Why not Wi-Fi: coverage and power constraints.",
+              "Why not ZigBee: limited range unless many gateways are deployed."
+            ],
+            fr: [
+              "LPWAN (souvent LoRaWAN) est le meilleur: longue portee, faible conso, petits messages periodiques, adapte a 3 ans batterie.",
+              "Pourquoi pas Wi-Fi: couverture et energie insuffisantes.",
+              "Pourquoi pas ZigBee: portee limitee sans nombreuses passerelles."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case2-q2",
+          prompt: {
+            en: "Is Edge computing mandatory here?",
+            fr: "Edge computing est-il obligatoire ici ?"
+          },
+          correction: {
+            en: [
+              "Not mandatory: no critical real-time alert requirement.",
+              "Cloud-only can work; Edge buffering is optional for resilience during connectivity drops."
+            ],
+            fr: [
+              "Pas obligatoire: pas d exigence d alerte critique temps reel.",
+              "Cloud-only peut fonctionner; buffer Edge optionnel pour resilence en cas de coupures."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case2-q3",
+          prompt: {
+            en: "Give 2 SMART requirements.",
+            fr: "Donner 2 exigences SMART."
+          },
+          correction: {
+            en: [
+              "Send temperature/humidity every 15 minutes with >=95% daily delivery rate.",
+              "Battery lifetime must be >=36 months under the defined sampling plan."
+            ],
+            fr: [
+              "Envoyer temperature/humidite toutes les 15 minutes avec >=95% de livraison quotidienne.",
+              "Autonomie batterie >=36 mois selon le plan d echantillonnage defini."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case2-q4",
+          prompt: {
+            en: "Provide 3 deployment constraints.",
+            fr: "Donner 3 contraintes de deploiement."
+          },
+          correction: {
+            en: [
+              "Coverage gaps.",
+              "Battery autonomy.",
+              "Maintenance logistics at 150-device scale (plus budget)."
+            ],
+            fr: [
+              "Trous de couverture.",
+              "Autonomie batterie.",
+              "Logistique de maintenance a 150 capteurs (et budget)."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case2-q5",
+          prompt: {
+            en: "Propose 2 KPIs.",
+            fr: "Proposer 2 KPI."
+          },
+          correction: {
+            en: [
+              "Packet delivery rate (%).",
+              "Battery life estimate.",
+              "Also useful: messages/day and gateway uptime."
+            ],
+            fr: [
+              "Taux de livraison des paquets (%).",
+              "Autonomie batterie estimee.",
+              "Aussi utile: messages/jour et disponibilite gateway."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case2-q6",
+          prompt: {
+            en: "Propose a textual architecture (ASCII).",
+            fr: "Proposer une architecture textuelle (ASCII)."
+          },
+          correction: {
+            en: [
+              "[Outdoor Sensors] -> (LoRa/LPWAN) -> [LoRaWAN Gateway] -> (IP Backhaul) -> [Network Server] -> (MQTT/HTTP) -> [Cloud Storage + Dashboard]"
+            ],
+            fr: [
+              "[Capteurs exterieurs] -> (LoRa/LPWAN) -> [Gateway LoRaWAN] -> (Reseau IP) -> [Serveur reseau] -> (MQTT/HTTP) -> [Cloud + Dashboard]"
+            ]
+          }
+        }
+      ],
+      architectureAscii: [
+        "[Outdoor Sensors]",
+        "      |",
+        "  (LoRa / LPWAN)",
+        "      |",
+        "[LoRaWAN Gateway]",
+        "      |",
+        "   (IP Backhaul)",
+        "      |",
+        "[Network Server]",
+        "      |",
+        " (MQTT / HTTP)",
+        "      |",
+        "[Cloud Storage + Dashboard]"
+      ].join("\n"),
+      reasoning: {
+        en: [
+          "Range around 2 km + weak Wi-Fi -> long-range network needed.",
+          "3-year battery objective -> low power and low throughput profile.",
+          "No critical real-time alerts -> cloud-centric design acceptable.",
+          "LoRaWAN private for control/budget; NB-IoT when operator model is preferred.",
+          "Track KPIs: delivery rate, battery estimate, gateway uptime."
+        ],
+        fr: [
+          "Portee ~2 km + Wi-Fi faible -> besoin longue portee.",
+          "Objectif 3 ans batterie -> profil faible conso et faible debit.",
+          "Pas d alerte critique temps reel -> approche cloud acceptable.",
+          "LoRaWAN prive pour controle/budget; NB-IoT si modele operateur prefere.",
+          "Suivre KPI: taux livraison, estimation batterie, uptime gateway."
+        ]
+      },
+      chart: {
+        type: "bar",
+        title: "Case 2 Reliability & Battery",
+        labels: ["Delivery Target %", "Delivery Measured %", "Battery Target (months)", "Battery Estimated (months)"],
+        data: [95, 97, 36, 39]
+      }
+    },
+    {
+      id: "iot-c1-case-3",
+      title: "Case Study 3 - Logistics: Tracking Low-Value Parcels",
+      context: {
+        en: "A logistics partner wants to track low-value parcels between cities. Data is very small (ID + location status), battery must last as long as possible, coverage must be regional/national, and devices may be inside trucks/buildings. Cost per device must be low and latency is not critical.",
+        fr: "Un partenaire logistique veut suivre des colis peu chers entre villes. Les messages sont tres courts (ID + statut), la batterie doit tenir au maximum, la couverture doit etre regionale/nationale, et les traceurs peuvent etre dans des camions/batiments. Le cout par device doit rester faible et la latence n est pas critique."
+      },
+      objectives: {
+        en: [
+          "Wide coverage for moving parcels.",
+          "Very long battery life with sparse updates.",
+          "Low device and network cost at high scale."
+        ],
+        fr: [
+          "Couverture large pour colis en mouvement.",
+          "Autonomie tres longue avec mises a jour rares.",
+          "Cout device/reseau faible a grande echelle."
+        ]
+      },
+      constraints: {
+        en: [
+          "Low cost per device.",
+          "Thousands of parcels to manage.",
+          "Indoor penetration may be needed (trucks/buildings).",
+          "Delay is acceptable (latency not critical)."
+        ],
+        fr: [
+          "Faible cout par appareil.",
+          "Gestion de milliers de colis.",
+          "Besoin possible de penetration indoor (camions/batiments).",
+          "Delai acceptable (latence non critique)."
+        ]
+      },
+      questions: [
+        {
+          id: "iot-c1-case3-q1",
+          prompt: {
+            en: "Choose best network family: Sigfox, private LoRaWAN, NB-IoT/LTE-M.",
+            fr: "Choisir la meilleure famille reseau: Sigfox, LoRaWAN prive, NB-IoT/LTE-M."
+          },
+          correction: {
+            en: [
+              "Often Sigfox or NB-IoT (operator wide coverage) is best.",
+              "Sigfox: ultra-low messaging, low power, low cost device profile, with daily message limits.",
+              "NB-IoT: stronger reliability/penetration but subscription cost.",
+              "Private LoRaWAN is hard to scale nationwide unless you deploy gateways everywhere."
+            ],
+            fr: [
+              "Souvent Sigfox ou NB-IoT (couverture operateur) est le plus adapte.",
+              "Sigfox: tres faible debit, tres faible conso, cout appareil reduit, avec limite de messages/jour.",
+              "NB-IoT: meilleure fiabilite/penetration mais abonnement operateur.",
+              "LoRaWAN prive est difficile a etendre nationalement sans deploiement massif de gateways."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case3-q2",
+          prompt: {
+            en: "Is latency a key constraint here?",
+            fr: "La latence est-elle une contrainte cle ici ?"
+          },
+          correction: {
+            en: [
+              "No. The case allows delayed updates; coverage and energy are more important."
+            ],
+            fr: [
+              "Non. Le cas accepte des delais; couverture et energie sont prioritaires."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case3-q3",
+          prompt: {
+            en: "Give 3 design-driving constraints.",
+            fr: "Donner 3 contraintes qui pilotent le design."
+          },
+          correction: {
+            en: [
+              "National/regional coverage.",
+              "Extreme battery life.",
+              "Low cost per device.",
+              "Also: indoor penetration and large-scale management."
+            ],
+            fr: [
+              "Couverture nationale/regionale.",
+              "Autonomie batterie maximale.",
+              "Faible cout par appareil.",
+              "Aussi: penetration indoor et gestion a grande echelle."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case3-q4",
+          prompt: {
+            en: "Propose 2 KPIs.",
+            fr: "Proposer 2 KPI."
+          },
+          correction: {
+            en: [
+              "Average messages delivered per parcel per day.",
+              "Battery life estimate.",
+              "Coverage success rate (% of trips with updates)."
+            ],
+            fr: [
+              "Messages livres par colis et par jour (moyenne).",
+              "Autonomie batterie estimee.",
+              "Taux de couverture (% de trajets avec updates)."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case3-q5",
+          prompt: {
+            en: "Propose a textual architecture (ASCII).",
+            fr: "Proposer une architecture textuelle (ASCII)."
+          },
+          correction: {
+            en: [
+              "[Parcel Tracker Device] -> (Sigfox or NB-IoT Operator Network) -> [Operator Backend/Core] -> (API/MQTT/HTTP) -> [Cloud Platform] -> [Tracking Dashboard + Alerts]"
+            ],
+            fr: [
+              "[Traceur colis] -> (Reseau operateur Sigfox ou NB-IoT) -> [Backend operateur] -> (API/MQTT/HTTP) -> [Cloud] -> [Dashboard + Alertes]"
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case3-q6",
+          prompt: {
+            en: "Source optimization: should GPS coordinates be sent continuously?",
+            fr: "Optimisation a la source: faut-il envoyer le GPS en continu ?"
+          },
+          correction: {
+            en: [
+              "No. Use event-based updates to maximize battery and reduce cost:",
+              "on departure/arrival, once every X hours, and when motion starts/stops.",
+              "Continuous GPS + frequent transmissions drains battery and increases network cost."
+            ],
+            fr: [
+              "Non. Utiliser des envois evenementiels pour maximiser autonomie et reduire cout:",
+              "depart/arrivee, toutes les X heures, debut/fin de mouvement.",
+              "GPS continu + transmissions frequentes detruisent la batterie et augmentent le cout reseau."
+            ]
+          }
+        }
+      ],
+      architectureAscii: [
+        "[Parcel Tracker Device]",
+        "       |",
+        "(Sigfox or NB-IoT Operator Network)",
+        "       |",
+        "[Operator Backend / Core Network]",
+        "       |",
+        "   (API / MQTT / HTTP)",
+        "       |",
+        "[Cloud Platform]",
+        "       |",
+        "[Tracking Dashboard + Alerts]"
+      ].join("\n"),
+      reasoning: {
+        en: [
+          "Mobility + national coverage -> operator network is usually the simplest model.",
+          "Low-value assets + tiny payloads -> ultra-low throughput acceptable.",
+          "Optimize source with sparse event-based updates.",
+          "Pick Sigfox for minimal cost/messages profile, NB-IoT for stronger reliability/penetration.",
+          "Use cloud dashboard for fleet-scale visibility."
+        ],
+        fr: [
+          "Mobilite + couverture nationale -> reseau operateur souvent le plus simple.",
+          "Actifs faible valeur + petits messages -> ultra bas debit acceptable.",
+          "Optimiser la source avec updates evenementielles et rares.",
+          "Choisir Sigfox pour cout minimal/messages rares, NB-IoT pour meilleure fiabilite/penetration.",
+          "Utiliser dashboard cloud pour suivi a l echelle flotte."
+        ]
+      },
+      chart: {
+        type: "bar",
+        title: "Case 3 Network Fit (relative)",
+        labels: ["Sigfox", "NB-IoT", "LTE-M"],
+        data: [9, 8, 6]
+      }
+    }
+  ];
+
   window.PERSYK_DATA = {
     siteName: "PERSEYK",
     themes: [
@@ -1750,7 +2300,7 @@
           {
             id: "iot-cours-1",
             name: "Cours 1 - Foundations",
-            description: "Easy Block 1-2, Medium Block 1-2 (+ Set B), Medium-Difficult 2026, Difficult Block 1-2 (+ Set B), Hard Block 2 Exam Trap (100 QCM).",
+            description: "Easy/Medium/Hard blocks (100 QCM) + 3 case studies (smart classroom, outdoor campus, logistics).",
             blocks: [
               {
                 id: "iot-cours-1-easy-block-1",
@@ -1802,7 +2352,8 @@
                 name: "Difficult Block 2 - 10 QCM",
                 questions: difficultBlock2Questions
               }
-            ]
+            ],
+            caseStudies: caseStudiesCours1
           }
         ]
       }

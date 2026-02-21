@@ -80,18 +80,21 @@
     selectedThemeId: null,
     selectedModuleId: null,
     selectedBlockId: null,
+    selectedCaseStudyId: null,
     currentQuestionIndex: 0,
     attemptsUsed: 0,
     selectedWrongOptionIds: [],
     questionResolved: false,
     feedback: null,
     score: 0,
-    missedQuestions: []
+    missedQuestions: [],
+    caseAnswerOpen: {}
   };
   var summaryCharts = {
     score: null,
     missed: null
   };
+  var caseStudyChart = null;
 
   function escapeHtml(value) {
     return String(value || "")
@@ -133,6 +136,13 @@
     }
   }
 
+  function destroyCaseStudyChart() {
+    if (caseStudyChart) {
+      caseStudyChart.destroy();
+      caseStudyChart = null;
+    }
+  }
+
   function findTheme(themeId) {
     return data.themes.find(function (theme) {
       return theme.id === themeId;
@@ -162,6 +172,17 @@
 
     return module.blocks.find(function (block) {
       return block.id === state.selectedBlockId;
+    }) || null;
+  }
+
+  function getCurrentCaseStudy() {
+    var module = getCurrentModule();
+    if (!module || !module.caseStudies) {
+      return null;
+    }
+
+    return module.caseStudies.find(function (caseStudy) {
+      return caseStudy.id === state.selectedCaseStudyId;
     }) || null;
   }
 
@@ -206,6 +227,9 @@
     if (screen !== "summary") {
       destroySummaryCharts();
     }
+    if (screen !== "case-study") {
+      destroyCaseStudyChart();
+    }
     state.screen = screen;
     render();
   }
@@ -216,6 +240,14 @@
     state.selectedBlockId = blockId;
     resetQuizState();
     goTo("quiz");
+  }
+
+  function startCaseStudy(themeId, moduleId, caseStudyId) {
+    state.selectedThemeId = themeId;
+    state.selectedModuleId = moduleId;
+    state.selectedCaseStudyId = caseStudyId;
+    state.caseAnswerOpen = {};
+    goTo("case-study");
   }
 
   function recordMissedQuestion(question) {
@@ -617,6 +649,36 @@
           })
           .join("");
 
+        var caseStudyMarkup = "";
+        if (module.caseStudies && module.caseStudies.length) {
+          caseStudyMarkup =
+            "<div class=\"spacer-20\"></div>" +
+            "<h4 class=\"title\" style=\"font-size:18px; margin-bottom:8px;\">Etudes de cas</h4>" +
+            "<div class=\"block-list\">" +
+            module.caseStudies
+              .map(function (caseStudy) {
+                return (
+                  "<article class=\"block-card\">" +
+                  "<h4>" +
+                  escapeHtml(caseStudy.title) +
+                  "</h4>" +
+                  "<p class=\"card-meta\">" +
+                  (caseStudy.questions ? caseStudy.questions.length : 0) +
+                  " question(s) + correction</p>" +
+                  "<button class=\"btn secondary\" data-action=\"open-case-study\" data-theme-id=\"" +
+                  escapeHtml(theme.id) +
+                  "\" data-module-id=\"" +
+                  escapeHtml(module.id) +
+                  "\" data-case-study-id=\"" +
+                  escapeHtml(caseStudy.id) +
+                  "\">Ouvrir l etude de cas</button>" +
+                  "</article>"
+                );
+              })
+              .join("") +
+            "</div>";
+        }
+
         return (
           "<article class=\"module-card\">" +
           "<h3>" +
@@ -625,9 +687,11 @@
           "<p class=\"card-meta\">" +
           escapeHtml(module.description || "") +
           "</p>" +
+          "<h4 class=\"title\" style=\"font-size:18px; margin-bottom:8px;\">Blocs QCM</h4>" +
           "<div class=\"block-list\">" +
           blockMarkup +
           "</div>" +
+          caseStudyMarkup +
           "</article>"
         );
       })
@@ -767,6 +831,195 @@
       "</section>";
   }
 
+  function renderCaseStudyChart(caseStudy) {
+    if (typeof window.Chart === "undefined") {
+      return;
+    }
+
+    destroyCaseStudyChart();
+
+    if (!caseStudy || !caseStudy.chart) {
+      return;
+    }
+
+    var canvas = document.getElementById("case-study-chart");
+    if (!canvas) {
+      return;
+    }
+
+    caseStudyChart = new window.Chart(canvas, {
+      type: caseStudy.chart.type || "bar",
+      data: {
+        labels: caseStudy.chart.labels || [],
+        datasets: [
+          {
+            label: caseStudy.chart.title || "Case KPI",
+            data: caseStudy.chart.data || [],
+            backgroundColor: ["#0f766e", "#0f766ebd", "#d97706", "#115e59", "#84a98c"],
+            borderRadius: 8
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+
+  function renderCaseStudy() {
+    var theme = getCurrentTheme();
+    var module = getCurrentModule();
+    var caseStudy = getCurrentCaseStudy();
+
+    if (!theme || !module || !caseStudy) {
+      goTo("theme");
+      return;
+    }
+
+    var objectivesEn = (caseStudy.objectives && caseStudy.objectives.en ? caseStudy.objectives.en : [])
+      .map(function (item) {
+        return "<li>" + escapeHtml(item) + "</li>";
+      })
+      .join("");
+    var objectivesFr = (caseStudy.objectives && caseStudy.objectives.fr ? caseStudy.objectives.fr : [])
+      .map(function (item) {
+        return "<li>" + escapeHtml(item) + "</li>";
+      })
+      .join("");
+    var constraintsEn = (caseStudy.constraints && caseStudy.constraints.en ? caseStudy.constraints.en : [])
+      .map(function (item) {
+        return "<li>" + escapeHtml(item) + "</li>";
+      })
+      .join("");
+    var constraintsFr = (caseStudy.constraints && caseStudy.constraints.fr ? caseStudy.constraints.fr : [])
+      .map(function (item) {
+        return "<li>" + escapeHtml(item) + "</li>";
+      })
+      .join("");
+
+    var questionsMarkup = (caseStudy.questions || [])
+      .map(function (question, index) {
+        var isOpen = !!state.caseAnswerOpen[question.id];
+        var correctionEn = (question.correction && question.correction.en ? question.correction.en : [])
+          .map(function (line) {
+            return "<li>" + escapeHtml(line) + "</li>";
+          })
+          .join("");
+        var correctionFr = (question.correction && question.correction.fr ? question.correction.fr : [])
+          .map(function (line) {
+            return "<li>" + escapeHtml(line) + "</li>";
+          })
+          .join("");
+
+        return (
+          "<article class=\"case-question-card\">" +
+          "<h4>Q" +
+          (index + 1) +
+          " - " +
+          escapeHtml(question.prompt.en || "") +
+          "</h4>" +
+          "<p class=\"case-question-fr\">" +
+          escapeHtml(question.prompt.fr || "") +
+          "</p>" +
+          "<button class=\"btn secondary small\" data-action=\"toggle-case-answer\" data-question-id=\"" +
+          escapeHtml(question.id) +
+          "\">" +
+          (isOpen ? "Masquer correction" : "Voir correction") +
+          "</button>" +
+          (isOpen
+            ? "<div class=\"case-correction\"><p><span class=\"lang-chip\">EN</span></p><ul>" +
+              correctionEn +
+              "</ul><p><span class=\"lang-chip\">FR</span></p><ul>" +
+              correctionFr +
+              "</ul></div>"
+            : "") +
+          "</article>"
+        );
+      })
+      .join("");
+
+    var reasoningEn = (caseStudy.reasoning && caseStudy.reasoning.en ? caseStudy.reasoning.en : [])
+      .map(function (item) {
+        return "<li>" + escapeHtml(item) + "</li>";
+      })
+      .join("");
+    var reasoningFr = (caseStudy.reasoning && caseStudy.reasoning.fr ? caseStudy.reasoning.fr : [])
+      .map(function (item) {
+        return "<li>" + escapeHtml(item) + "</li>";
+      })
+      .join("");
+
+    appRoot.innerHTML =
+      "<section class=\"panel\">" +
+      "<div class=\"btn-row\"><button class=\"btn secondary\" data-action=\"back-to-theme\">Retour module</button></div>" +
+      "<div class=\"spacer-20\"></div>" +
+      "<p class=\"kicker\">" +
+      escapeHtml(theme.name) +
+      " / " +
+      escapeHtml(module.name) +
+      " / Etude de cas</p>" +
+      "<h2 class=\"title\">" +
+      escapeHtml(caseStudy.title || "") +
+      "</h2>" +
+      "<div class=\"spacer-20\"></div>" +
+      "<section class=\"case-block\">" +
+      "<h3>Context</h3>" +
+      "<p><span class=\"lang-chip\">EN</span>" +
+      escapeHtml(caseStudy.context && caseStudy.context.en ? caseStudy.context.en : "") +
+      "</p>" +
+      "<p><span class=\"lang-chip\">FR</span>" +
+      escapeHtml(caseStudy.context && caseStudy.context.fr ? caseStudy.context.fr : "") +
+      "</p>" +
+      "</section>" +
+      "<div class=\"case-grid\">" +
+      "<section class=\"case-block\"><h3>Objectives</h3><p><span class=\"lang-chip\">EN</span></p><ul>" +
+      objectivesEn +
+      "</ul><p><span class=\"lang-chip\">FR</span></p><ul>" +
+      objectivesFr +
+      "</ul></section>" +
+      "<section class=\"case-block\"><h3>Constraints</h3><p><span class=\"lang-chip\">EN</span></p><ul>" +
+      constraintsEn +
+      "</ul><p><span class=\"lang-chip\">FR</span></p><ul>" +
+      constraintsFr +
+      "</ul></section>" +
+      "</div>" +
+      "<div class=\"spacer-20\"></div>" +
+      "<section class=\"case-block\">" +
+      "<h3>Questions & Corrections</h3>" +
+      "<div class=\"case-question-list\">" +
+      questionsMarkup +
+      "</div>" +
+      "</section>" +
+      "<div class=\"spacer-20\"></div>" +
+      "<div class=\"case-grid\">" +
+      "<section class=\"case-block\"><h3>Textual Architecture (ASCII)</h3><pre class=\"ascii-diagram\">" +
+      escapeHtml(caseStudy.architectureAscii || "") +
+      "</pre></section>" +
+      "<section class=\"case-block\"><h3>Reasoning Path</h3><p><span class=\"lang-chip\">EN</span></p><ul>" +
+      reasoningEn +
+      "</ul><p><span class=\"lang-chip\">FR</span></p><ul>" +
+      reasoningFr +
+      "</ul></section>" +
+      "</div>" +
+      "<div class=\"spacer-20\"></div>" +
+      "<section class=\"case-block\">" +
+      "<h3>Case KPI Chart</h3>" +
+      "<div class=\"chart-wrap\"><canvas id=\"case-study-chart\"></canvas></div>" +
+      "</section>" +
+      "</section>";
+
+    renderCaseStudyChart(caseStudy);
+  }
+
   function renderSummary() {
     var theme = getCurrentTheme();
     var module = getCurrentModule();
@@ -902,6 +1155,11 @@
       return;
     }
 
+    if (state.screen === "case-study") {
+      renderCaseStudy();
+      return;
+    }
+
     if (state.screen === "summary") {
       renderSummary();
       return;
@@ -946,6 +1204,8 @@
       state.selectedThemeId = null;
       state.selectedModuleId = null;
       state.selectedBlockId = null;
+      state.selectedCaseStudyId = null;
+      state.caseAnswerOpen = {};
       resetQuizState();
       goTo("login");
       return;
@@ -955,6 +1215,8 @@
       state.selectedThemeId = trigger.getAttribute("data-theme-id");
       state.selectedModuleId = null;
       state.selectedBlockId = null;
+      state.selectedCaseStudyId = null;
+      state.caseAnswerOpen = {};
       goTo("theme");
       return;
     }
@@ -963,6 +1225,8 @@
       state.selectedThemeId = null;
       state.selectedModuleId = null;
       state.selectedBlockId = null;
+      state.selectedCaseStudyId = null;
+      state.caseAnswerOpen = {};
       goTo("themes");
       return;
     }
@@ -972,6 +1236,15 @@
         trigger.getAttribute("data-theme-id"),
         trigger.getAttribute("data-module-id"),
         trigger.getAttribute("data-block-id")
+      );
+      return;
+    }
+
+    if (action === "open-case-study") {
+      startCaseStudy(
+        trigger.getAttribute("data-theme-id"),
+        trigger.getAttribute("data-module-id"),
+        trigger.getAttribute("data-case-study-id")
       );
       return;
     }
@@ -986,8 +1259,19 @@
       return;
     }
 
+    if (action === "toggle-case-answer") {
+      var questionId = trigger.getAttribute("data-question-id");
+      if (questionId) {
+        state.caseAnswerOpen[questionId] = !state.caseAnswerOpen[questionId];
+        renderCaseStudy();
+      }
+      return;
+    }
+
     if (action === "back-to-theme") {
       resetQuizState();
+      state.selectedCaseStudyId = null;
+      state.caseAnswerOpen = {};
       goTo("theme");
       return;
     }

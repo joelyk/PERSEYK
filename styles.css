@@ -574,6 +574,89 @@ body {
   height: 250px;
 }
 
+.case-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.case-block {
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 88% 10%, #d5ece8aa 0, transparent 38%),
+    linear-gradient(180deg, #fff, #fbfdfd);
+  padding: 12px;
+  box-shadow: 0 14px 24px -22px rgba(16, 34, 46, 0.85);
+}
+
+.case-block h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-family: "Sora", "Segoe UI", sans-serif;
+}
+
+.case-block p {
+  margin: 0;
+}
+
+.case-block p + p {
+  margin-top: 8px;
+}
+
+.case-block ul {
+  margin: 8px 0 0 16px;
+  padding: 0;
+}
+
+.case-block li + li {
+  margin-top: 4px;
+}
+
+.case-question-list {
+  display: grid;
+  gap: 10px;
+}
+
+.case-question-card {
+  border: 1px solid #d7e3e2;
+  border-radius: 12px;
+  background: #fff;
+  padding: 11px;
+}
+
+.case-question-card h4 {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+.case-question-fr {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.case-correction {
+  margin-top: 10px;
+  border-top: 1px dashed #d7e3e2;
+  padding-top: 8px;
+}
+
+.case-correction ul {
+  margin: 6px 0 0 16px;
+}
+
+.ascii-diagram {
+  margin: 0;
+  border: 1px solid #d9e8e6;
+  border-radius: 10px;
+  background: #f4f9f8;
+  padding: 10px;
+  font-size: 12px;
+  line-height: 1.35;
+  overflow-x: auto;
+}
+
 @keyframes rise {
   from {
     opacity: 0;
