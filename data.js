@@ -1395,6 +1395,178 @@
     )
   );
 
+  var mediumDifficultBlock2026Questions = [];
+
+  mediumDifficultBlock2026Questions.push(
+    makeQuestion(
+      "iot-c1-md26-q61",
+      "Selon des rapports 2025-2026, quelle technologie LPWAN a atteint environ 125 millions de terminaux deployes avec ~25% de CAGR ?",
+      "According to recent 2025-2026 reports, which LPWAN technology has reached approximately 125 million deployed end devices globally and achieved a 25% CAGR?",
+      [
+        makeOption("a", "Sigfox", "Sigfox reste plus niche et moins deploie que LoRaWAN, surtout pour cas tres limites et souvent unidirectionnels.", "Sigfox remains more niche and less deployed than LoRaWAN, often for narrower one-way alert use cases."),
+        makeOption("b", "LoRaWAN"),
+        makeOption("c", "NB-IoT", "NB-IoT peut dominer certains scenarios cellulaires, mais ici la reference globale de deploiement LPWAN citee est LoRaWAN.", "NB-IoT can lead in some cellular scenarios, but the specific LPWAN deployment reference here points to LoRaWAN."),
+        makeOption("d", "LTE-M", "LTE-M est tres utile pour mobilite, mais moins massif que LoRaWAN sur le parc capteurs statiques tres basse conso.", "LTE-M is strong for mobility, but less massive than LoRaWAN for large fleets of low-power static sensors.")
+      ],
+      "b",
+      "LoRaWAN a fortement scale en 2025 avec environ 125M d appareils deployes, pousse par sa flexibilite public/prive, sa faible conso, et son usage massif en utilities, agriculture et smart cities. Sur un campus, il couvre de grands espaces avec capteurs batterie et maintenance reduite.",
+      "LoRaWAN scaled massively in 2025 with about 125M deployed devices, driven by public/private flexibility, low power usage, and broad utility/agri/smart-city adoption. On campus, it supports long-range battery sensors over large areas with minimal maintenance."
+    )
+  );
+
+  mediumDifficultBlock2026Questions.push(
+    makeQuestion(
+      "iot-c1-md26-q62",
+      "Dans un campus energie intelligent (tendances 2025), quelle approche hybride est la plus recommandee pour equilibrer video haut debit et capteurs ultra basse conso ?",
+      "In a smart campus energy management use case (2025 trends), which hybrid connectivity approach is increasingly recommended for balancing high-bandwidth needs (e.g., video) and ultra-low-power sensors?",
+      [
+        makeOption("a", "Pure 5G everywhere", "Le tout-5G est couteux et trop energivore pour des milliers de petits capteurs batterie.", "Pure 5G is costly and power-hungry for massive fleets of battery-powered low-data sensors."),
+        makeOption("b", "Mixed LPWAN (LoRaWAN private) + Wi-Fi/5G for high-data zones"),
+        makeOption("c", "Only NB-IoT for all devices", "NB-IoT est pertinent sur certains cas, mais moins flexible/couteux qu un mix prive LoRaWAN + reseaux haut debit locaux.", "NB-IoT is useful in some cases, but often less flexible/cost-optimized than private LoRaWAN plus local high-throughput networks."),
+        makeOption("d", "Sigfox + satellite only", "Cette combinaison est trop limitee pour pilotage bidirectionnel riche et usages campus heterogenes.", "This combination is too limited for rich bidirectional control and heterogeneous campus workloads.")
+      ],
+      "b",
+      "Le mix LoRaWAN prive + Wi-Fi/5G est devenu un standard pragmatique: LoRaWAN pour capteurs longue portee basse conso, Wi-Fi/5G pour flux video et interactions temps reel.",
+      "A private LoRaWAN + Wi-Fi/5G mix is now a pragmatic standard: LoRaWAN for long-range low-power sensors, Wi-Fi/5G for video and real-time interactive workloads."
+    )
+  );
+
+  mediumDifficultBlock2026Questions.push(
+    makeQuestion(
+      "iot-c1-md26-q63",
+      "Quelle avancee recente LoRaWAN (2025-2026) renforce fortement le monitoring campus-edge ou remote ?",
+      "What recent advancement in LoRaWAN (reported in 2025-2026) significantly improves its role in remote or campus-edge monitoring?",
+      [
+        makeOption("a", "Support for non-terrestrial networks (NTN/satellite) integration"),
+        makeOption("b", "Increase to 1 Gbps data rates", "LoRaWAN reste un protocole bas debit; 1 Gbps ne correspond pas a son objectif.", "LoRaWAN remains low-throughput; 1 Gbps is not aligned with its design goals."),
+        makeOption("c", "Mandatory 5G compatibility", "LoRaWAN est independant et ne depend pas d une compatibilite 5G obligatoire.", "LoRaWAN is independent and does not require mandatory 5G compatibility."),
+        makeOption("d", "Removal of private network option", "Au contraire, les reseaux prives restent un avantage cle de LoRaWAN.", "On the contrary, private networking remains a core LoRaWAN strength.")
+      ],
+      "a",
+      "L integration NTN/satellite etend la couverture de LoRaWAN dans les zones sans infra terrestre, utile pour stations meteo, zones vertes et capteurs peripheriques de campus.",
+      "NTN/satellite integration extends LoRaWAN coverage to areas without terrestrial infrastructure, useful for weather stations, green zones, and campus-edge sensors."
+    )
+  );
+
+  mediumDifficultBlock2026Questions.push(
+    makeQuestion(
+      "iot-c1-md26-q64",
+      "En 2025 sur campus intelligent, quelle famille domine les connexions IoT haut debit (classes connectees, video) ?",
+      "In a 2025 smart campus context, which technology family is projected to dominate IoT connections for high-throughput applications like smart classrooms with video?",
+      [
+        makeOption("a", "LPWAN (LoRaWAN/Sigfox)", "LPWAN est optimise pour faible debit et grande autonomie, pas video haut debit.", "LPWAN is optimized for low throughput and long battery life, not high-bandwidth video."),
+        makeOption("b", "Wi-Fi IoT + Bluetooth IoT"),
+        makeOption("c", "NB-IoT only", "NB-IoT cible surtout petits volumes capteurs, pas usages multimedia de salle.", "NB-IoT is mainly for low-rate sensor data, not classroom multimedia workloads."),
+        makeOption("d", "Satellite IoT", "Le satellite est plus niche, plus couteux et souvent moins adapte a un campus dense.", "Satellite is more niche, costlier, and often less suitable for dense campus deployments.")
+      ],
+      "b",
+      "Wi-Fi et Bluetooth dominent largement les connexions IoT campus: Wi-Fi pour debit/interactivite, BLE pour proximite/wearables basse conso.",
+      "Wi-Fi and Bluetooth dominate campus IoT connectivity: Wi-Fi for throughput/interactivity, BLE for low-power proximity and wearables."
+    )
+  );
+
+  mediumDifficultBlock2026Questions.push(
+    makeQuestion(
+      "iot-c1-md26-q65",
+      "Pourquoi LoRaWAN prive est de plus en plus prefere a NB-IoT operateur pour capteurs indoor/outdoor denses en 2026 ?",
+      "For a university smart building deployment in 2026, why is private LoRaWAN increasingly preferred over operator-dependent LPWAN like NB-IoT for dense indoor/outdoor sensors?",
+      [
+        makeOption("a", "Full control, no subscription fees, better interoperability with satellite/NTN"),
+        makeOption("b", "Higher data rates than 5G", "LoRaWAN n est pas concu pour depasser les debits 5G.", "LoRaWAN is not designed to exceed 5G throughput."),
+        makeOption("c", "Mandatory mains power", "LoRaWAN est justement pense pour des objets batterie longue duree.", "LoRaWAN is specifically intended for long-life battery devices."),
+        makeOption("d", "Limited to one message per day", "LoRaWAN est configurable et pas limite a un seul message journalier.", "LoRaWAN is configurable and not limited to one message per day.")
+      ],
+      "a",
+      "Le prive LoRaWAN donne controle complet, cout operationnel faible (pas d abonnement par capteur), et integration plus simple avec extensions NTN/hybrides.",
+      "Private LoRaWAN gives full control, lower recurring cost (no per-device operator subscription), and easier integration with NTN/hybrid extensions."
+    )
+  );
+
+  mediumDifficultBlock2026Questions.push(
+    makeQuestion(
+      "iot-c1-md26-q66",
+      "Quelle tendance 2025-2026 pousse LPWAN vers une logique 'LPLAN' en entreprise/campus ?",
+      "Which 2025-2026 trend shifts LPWAN toward 'LPLAN' (Low-Power Local-Area Networks) in enterprise/campus settings?",
+      [
+        makeOption("a", "Rise of private networks replacing wide-area operator models"),
+        makeOption("b", "Decline of all low-power tech", "Le marche low-power IoT est en croissance, pas en declin.", "Low-power IoT is growing, not declining."),
+        makeOption("c", "Mandatory global satellite only", "Le satellite complete les reseaux terrestres, il ne les remplace pas totalement.", "Satellite complements terrestrial networks; it does not fully replace them."),
+        makeOption("d", "Increase in high-power 5G", "Le passage LPLAN vise justement faible puissance et controle local.", "The LPLAN shift is specifically about low power and local control.")
+      ],
+      "a",
+      "Les organisations deploient davantage de reseaux prives basse conso pour maitriser cout, latence, souverainete et fiabilite locale.",
+      "Organizations increasingly deploy private low-power networks to control cost, latency, sovereignty, and local reliability."
+    )
+  );
+
+  mediumDifficultBlock2026Questions.push(
+    makeQuestion(
+      "iot-c1-md26-q67",
+      "Pour suivi d occupation campus 2025, quelle combinaison protocolaire est la plus adaptee (proximite en salle + alertes outdoor longue portee) ?",
+      "In smart campus occupancy tracking (2025 use case), which protocol combination best supports both proximity detection in rooms and wide-area outdoor alerts?",
+      [
+        makeOption("a", "BLE for indoor proximity + LoRaWAN for outdoor long-range"),
+        makeOption("b", "Wi-Fi only everywhere", "Wi-Fi partout augmente conso/cout pour badges batterie et capteurs outdoor.", "Wi-Fi everywhere raises power/cost for battery badges and outdoor low-data sensors."),
+        makeOption("c", "NB-IoT for both", "NB-IoT n est pas ideal pour proximite fine en salle a courte distance.", "NB-IoT is not ideal for fine-grained in-room short-range proximity detection."),
+        makeOption("d", "Sigfox indoor", "Sigfox n est pas adapte a des scenarios indoor denses et interactifs.", "Sigfox is not suited to dense interactive indoor scenarios.")
+      ],
+      "a",
+      "BLE gere la presence de proximite en salle, LoRaWAN agrege et remonte les alertes/indicateurs outdoor longue portee.",
+      "BLE handles in-room proximity presence, while LoRaWAN carries long-range outdoor alerts and aggregated indicators."
+    )
+  );
+
+  mediumDifficultBlock2026Questions.push(
+    makeQuestion(
+      "iot-c1-md26-q68",
+      "Contrainte batiment universitaire multi-etages en 2026: pourquoi envisager Wi-Fi HaLow (802.11ah) plutot que Wi-Fi classique ?",
+      "Analyze a constraint for deploying IoT sensors in a multi-story university building in 2026: why might Wi-Fi HaLow (802.11ah) be considered over classic Wi-Fi?",
+      [
+        makeOption("a", "Better range and penetration at sub-1 GHz for deep indoor coverage"),
+        makeOption("b", "Much higher data rates than 5G", "HaLow n est pas plus rapide que 5G; il vise couverture/efficacite energetique.", "HaLow is not faster than 5G; it targets range/energy efficiency."),
+        makeOption("c", "Ultra-low power like Sigfox", "HaLow est basse conso, mais pas au niveau ultra-bas debit de Sigfox.", "HaLow is low power, but not at Sigfox ultra-low profile."),
+        makeOption("d", "No need for any power", "Aucun systeme radio ne fonctionne sans energie.", "No radio system works without power.")
+      ],
+      "a",
+      "Wi-Fi HaLow en sub-1 GHz ameliore portee et penetration murale pour sous-sols, cages d ascenseur et etages avec moins d APs.",
+      "Sub-1 GHz Wi-Fi HaLow improves range and wall penetration for basements, elevator shafts, and multi-floor coverage with fewer APs."
+    )
+  );
+
+  mediumDifficultBlock2026Questions.push(
+    makeQuestion(
+      "iot-c1-md26-q69",
+      "Pourquoi edge computing + LPWAN prive est un moteur KPI cle pour campus durables (2025-2026) ?",
+      "Justify why edge computing combined with private LPWAN is a key KPI driver for sustainable smart campuses in 2025-2026.",
+      [
+        makeOption("a", "Reduces latency/energy use by local processing, minimizes cloud data transfer"),
+        makeOption("b", "Increases global latency", "L edge reduit la latence en traitant au plus pres des capteurs.", "Edge decreases latency by processing near sensors."),
+        makeOption("c", "Requires constant 5G", "Un LPWAN prive fonctionne sans dependance constante au reseau 5G.", "Private LPWAN does not require constant 5G dependence."),
+        makeOption("d", "Eliminates all sensors", "Les capteurs restent indispensables; edge/LPWAN optimise leur exploitation.", "Sensors remain essential; edge/LPWAN optimizes their operation.")
+      ],
+      "a",
+      "Le traitement local edge permet actions rapides et envoi d agregats seulement via LPWAN, ce qui reduit conso, trafic et cout cloud.",
+      "Local edge processing enables fast actions and LPWAN uplink of aggregates only, reducing energy use, bandwidth, and cloud cost."
+    )
+  );
+
+  mediumDifficultBlock2026Questions.push(
+    makeQuestion(
+      "iot-c1-md26-q70",
+      "Mission diagnostic campus type CESI 2026: quelle architecture colle a l optimisation a la source (events + edge) pour couloir surpeuple ?",
+      "For a CESI-like campus diagnostic mission in 2026, which architecture best fits source optimization (events, edge) for an overcrowded hallway?",
+      [
+        makeOption("a", "Edge + private LoRaWAN: process events locally, send KPIs only"),
+        makeOption("b", "Full cloud with NB-IoT", "Le full cloud ajoute latence/bande passante sur un cas local temps reel.", "Full cloud adds latency/bandwidth overhead for local real-time corridor control."),
+        makeOption("c", "Pure BLE mesh", "BLE seul peut limiter la couverture pour remontee globale a l echelle campus.", "Pure BLE mesh can limit large-scale campus-wide uplink coverage."),
+        makeOption("d", "Satellite direct to devices", "Le satellite est surdimensionne et couteux pour un couloir local.", "Satellite direct is overkill and costly for a local hallway.")
+      ],
+      "a",
+      "Edge detecte les pics en temps reel (action locale), LoRaWAN prive remonte seulement des KPIs agreges pour pilotage durable et faible cout.",
+      "Edge detects peaks in real time (local action), while private LoRaWAN sends only aggregated KPIs for sustainable low-cost control."
+    )
+  );
+
   window.PERSYK_DATA = {
     siteName: "PERSEYK",
     themes: [
@@ -1406,7 +1578,7 @@
           {
             id: "iot-cours-1",
             name: "Cours 1 - Foundations",
-            description: "Easy Block 1-2, Medium Block 1-2 (+ Set B), Difficult Block 1-2 (+ Set B) (80 QCM).",
+            description: "Easy Block 1-2, Medium Block 1-2 (+ Set B), Medium-Difficult 2026, Difficult Block 1-2 (+ Set B) (90 QCM).",
             blocks: [
               {
                 id: "iot-cours-1-easy-block-1",
@@ -1432,6 +1604,11 @@
                 id: "iot-cours-1-medium-block-2-set-b",
                 name: "Medium Block 2 - Set B - 10 QCM",
                 questions: mediumBlock2SetBQuestions
+              },
+              {
+                id: "iot-cours-1-medium-difficult-2026",
+                name: "Medium-Difficult Block 2026 - 10 QCM",
+                questions: mediumDifficultBlock2026Questions
               },
               {
                 id: "iot-cours-1-difficult-block-1",
