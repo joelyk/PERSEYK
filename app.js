@@ -95,6 +95,7 @@
     missed: null
   };
   var caseStudyChart = null;
+  var caseStudySchemaGraph = null;
 
   function escapeHtml(value) {
     return String(value || "")
@@ -140,6 +141,13 @@
     if (caseStudyChart) {
       caseStudyChart.destroy();
       caseStudyChart = null;
+    }
+  }
+
+  function destroyCaseStudySchemaGraph() {
+    if (caseStudySchemaGraph) {
+      caseStudySchemaGraph.destroy();
+      caseStudySchemaGraph = null;
     }
   }
 
@@ -229,6 +237,7 @@
     }
     if (screen !== "case-study") {
       destroyCaseStudyChart();
+      destroyCaseStudySchemaGraph();
     }
     state.screen = screen;
     render();
@@ -875,6 +884,94 @@
     });
   }
 
+  function renderCaseStudySchema(caseStudy) {
+    if (typeof window.cytoscape === "undefined") {
+      return;
+    }
+
+    destroyCaseStudySchemaGraph();
+
+    if (!caseStudy || !caseStudy.schemaGraph) {
+      return;
+    }
+
+    var container = document.getElementById("case-study-schema-graph");
+    if (!container) {
+      return;
+    }
+
+    var elements = [];
+    var nodes = caseStudy.schemaGraph.nodes || [];
+    var edges = caseStudy.schemaGraph.edges || [];
+
+    nodes.forEach(function (node) {
+      elements.push({
+        data: {
+          id: node.id,
+          label: node.label
+        }
+      });
+    });
+
+    edges.forEach(function (edge, index) {
+      elements.push({
+        data: {
+          id: edge.id || "e" + index,
+          source: edge.source,
+          target: edge.target,
+          label: edge.label || ""
+        }
+      });
+    });
+
+    caseStudySchemaGraph = window.cytoscape({
+      container: container,
+      elements: elements,
+      style: [
+        {
+          selector: "node",
+          style: {
+            "shape": "round-rectangle",
+            "width": "label",
+            "height": "label",
+            "padding": "10px",
+            "background-color": "#0f766e",
+            "color": "#ffffff",
+            "font-size": 11,
+            "font-weight": 700,
+            "text-wrap": "wrap",
+            "text-max-width": 140,
+            "label": "data(label)",
+            "text-valign": "center",
+            "text-halign": "center"
+          }
+        },
+        {
+          selector: "edge",
+          style: {
+            "curve-style": "bezier",
+            "target-arrow-shape": "triangle",
+            "line-color": "#5b7c81",
+            "target-arrow-color": "#5b7c81",
+            "width": 2,
+            "label": "data(label)",
+            "font-size": 9,
+            "color": "#3c5357",
+            "text-background-color": "#ffffff",
+            "text-background-opacity": 1,
+            "text-background-padding": "2px"
+          }
+        }
+      ],
+      layout: {
+        name: (caseStudy.schemaGraph.layout && caseStudy.schemaGraph.layout.name) || "breadthfirst",
+        directed: true,
+        padding: 20,
+        spacingFactor: 1.2
+      }
+    });
+  }
+
   function renderCaseStudy() {
     var theme = getCurrentTheme();
     var module = getCurrentModule();
@@ -958,6 +1055,18 @@
       })
       .join("");
 
+    var schemaSectionMarkup = caseStudy.schemaGraph
+      ? "<section class=\"case-block\"><h3>Architecture Schema (JS Graph)</h3><div class=\"schema-graph-wrap\"><div id=\"case-study-schema-graph\" class=\"schema-graph-canvas\"></div></div></section>"
+      : "<section class=\"case-block\"><h3>Textual Architecture (ASCII)</h3><pre class=\"ascii-diagram\">" +
+        escapeHtml(caseStudy.architectureAscii || "") +
+        "</pre></section>";
+
+    var asciiOptionalMarkup = caseStudy.schemaGraph && caseStudy.architectureAscii
+      ? "<section class=\"case-block\"><h3>Textual Architecture (ASCII)</h3><pre class=\"ascii-diagram\">" +
+        escapeHtml(caseStudy.architectureAscii || "") +
+        "</pre></section>"
+      : "";
+
     appRoot.innerHTML =
       "<section class=\"panel\">" +
       "<div class=\"btn-row\"><button class=\"btn secondary\" data-action=\"back-to-theme\">Retour module</button></div>" +
@@ -1001,15 +1110,14 @@
       "</section>" +
       "<div class=\"spacer-20\"></div>" +
       "<div class=\"case-grid\">" +
-      "<section class=\"case-block\"><h3>Textual Architecture (ASCII)</h3><pre class=\"ascii-diagram\">" +
-      escapeHtml(caseStudy.architectureAscii || "") +
-      "</pre></section>" +
+      schemaSectionMarkup +
       "<section class=\"case-block\"><h3>Reasoning Path</h3><p><span class=\"lang-chip\">EN</span></p><ul>" +
       reasoningEn +
       "</ul><p><span class=\"lang-chip\">FR</span></p><ul>" +
       reasoningFr +
       "</ul></section>" +
       "</div>" +
+      (asciiOptionalMarkup ? "<div class=\"spacer-20\"></div><div class=\"case-grid\">" + asciiOptionalMarkup + "</div>" : "") +
       "<div class=\"spacer-20\"></div>" +
       "<section class=\"case-block\">" +
       "<h3>Case KPI Chart</h3>" +
@@ -1017,6 +1125,7 @@
       "</section>" +
       "</section>";
 
+    renderCaseStudySchema(caseStudy);
     renderCaseStudyChart(caseStudy);
   }
 

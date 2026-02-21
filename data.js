@@ -2286,6 +2286,442 @@
         labels: ["Sigfox", "NB-IoT", "LTE-M"],
         data: [9, 8, 6]
       }
+    },
+    {
+      id: "iot-c1-case-4",
+      title: "Case Study 4 - Smart Energy Management in a University Campus Building",
+      context: {
+        en: "A large campus building at CESI suffers from energy inefficiency: classrooms remain overheated or over-lit even when unoccupied. The task force wants an IoT solution to optimize occupancy, temperature, and lighting with low-power battery sensors, sparse updates (every 15 minutes), and multi-floor + adjacent outdoor coverage.",
+        fr: "Un grand batiment du campus CESI souffre d inefficacite energetique: salles surchauffees ou sur-eclairees meme vides. La task force veut une solution IoT pour optimiser occupation, temperature et eclairage avec capteurs batterie basse conso, updates eparses (15 min), et couverture multi-etages + zones exterieures adjacentes."
+      },
+      objectives: {
+        en: [
+          "Real-time monitoring and automation for occupancy, temperature, and lighting.",
+          "Reduce energy waste while maintaining comfort.",
+          "Integrate with existing alert/reporting systems.",
+          "Support long-term battery sustainability (>2 years)."
+        ],
+        fr: [
+          "Surveillance et automatisation temps reel pour occupation, temperature et eclairage.",
+          "Reduire le gaspillage energetique tout en gardant le confort.",
+          "S integrer aux systemes existants d alertes/rapports.",
+          "Assurer une durabilite batterie long terme (>2 ans)."
+        ]
+      },
+      constraints: {
+        en: [
+          "Limited Wi-Fi coverage in some zones.",
+          "Budget limits for infrastructure and recurring fees.",
+          "Privacy sensitivity for student movement data.",
+          "Indoor walls/floors and adjacent outdoor edge coverage.",
+          "Battery-powered sensors preferred."
+        ],
+        fr: [
+          "Couverture Wi-Fi limitee dans certaines zones.",
+          "Budget contraint pour infra et frais recurrents.",
+          "Sensibilite vie privee pour les mouvements etudiants.",
+          "Murs/etages indoor + couverture exterieure adjacente.",
+          "Preference pour capteurs sur batterie."
+        ]
+      },
+      questions: [
+        {
+          id: "iot-c1-case4-q1",
+          prompt: {
+            en: "Identify key requirements and constraints for this deployment.",
+            fr: "Identifier les exigences et contraintes cles de ce deploiement."
+          },
+          correction: {
+            en: [
+              "Requirements: real-time occupancy/temperature/light monitoring, sparse telemetry, >2-year battery life, multi-floor coverage, alert integration, campus scalability.",
+              "Constraints: weak Wi-Fi areas, budget (avoid unnecessary subscriptions), privacy/anonymization, wall penetration, battery-only operation."
+            ],
+            fr: [
+              "Exigences: suivi temps reel occupation/temperature/eclairage, telemetrie eparse, batterie >2 ans, couverture multi-etages, integration alertes, scalabilite campus.",
+              "Contraintes: zones Wi-Fi faibles, budget (eviter abonnements inutiles), anonymisation/privacy, penetration murs, fonctionnement sur batterie."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case4-q2",
+          prompt: {
+            en: "Classify suitable network families (PAN, LPWAN, WLAN, Cellular) and justify.",
+            fr: "Classer les familles reseau adaptees (PAN, LPWAN, WLAN, Cellulaire) et justifier."
+          },
+          correction: {
+            en: [
+              "PAN (BLE/ZigBee): good for short-range dense indoor local sensing; limited for campus-wide coverage without relays.",
+              "LPWAN (LoRaWAN): best primary candidate for low data, long range, battery longevity, private deployment options.",
+              "WLAN (Wi-Fi): useful for high-data gateway backhaul; not ideal for battery sensor endpoints.",
+              "Cellular (NB-IoT/LTE-M): good penetration/coverage but operator dependency and recurring costs."
+            ],
+            fr: [
+              "PAN (BLE/ZigBee): bon pour courte portee indoor dense locale; limite pour couverture campus sans relais.",
+              "LPWAN (LoRaWAN): meilleur candidat primaire pour faible donnees, longue portee, autonomie batterie, deploiement prive.",
+              "WLAN (Wi-Fi): utile pour backhaul de gateways a haut debit; peu adapte aux endpoints batterie.",
+              "Cellulaire (NB-IoT/LTE-M): bonne penetration/couverture mais dependance operateur et cout recurrent."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case4-q3",
+          prompt: {
+            en: "Propose a topology for multi-story building sensors and justify.",
+            fr: "Proposer une topologie pour capteurs multi-etages et justifier."
+          },
+          correction: {
+            en: [
+              "Hybrid mesh-star topology is suitable.",
+              "Mesh inside floors/rooms improves resilience through walls and avoids single-path failures.",
+              "Star aggregation toward gateways simplifies central management and alerting."
+            ],
+            fr: [
+              "Topologie hybride maillage-etoile adaptee.",
+              "Le maillage dans les etages/pieces ameliore la resilence face aux murs et evite les pannes de chemin unique.",
+              "L aggregation en etoile vers les gateways simplifie la gestion centralisee et les alertes."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case4-q4",
+          prompt: {
+            en: "Select and justify a primary IoT protocol for this case.",
+            fr: "Selectionner et justifier un protocole IoT primaire pour ce cas."
+          },
+          correction: {
+            en: [
+              "Private LoRaWAN is a strong primary option for low-rate battery telemetry across building + nearby outdoor zones.",
+              "It avoids operator subscription fees and supports campus governance/privacy control.",
+              "ZigBee can complement for room-level dense clusters where mesh is critical."
+            ],
+            fr: [
+              "LoRaWAN prive est une option primaire solide pour telemetrie batterie faible debit sur batiment + zones exterieures proches.",
+              "Il evite les frais operateur et renforce la gouvernance/privacy campus.",
+              "ZigBee peut completer pour clusters denses en salle si maillage critique."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case4-q5",
+          prompt: {
+            en: "Explain a suitable architecture (Cloud/Edge/Fog) and LPWAN positioning.",
+            fr: "Expliquer une architecture adaptee (Cloud/Edge/Fog) et le positionnement LPWAN."
+          },
+          correction: {
+            en: [
+              "Hybrid Edge-Fog-Cloud architecture is recommended.",
+              "Edge: immediate local control decisions (lighting/HVAC).",
+              "Fog: building-level aggregation and filtering.",
+              "Cloud: long-term analytics and cross-campus dashboards.",
+              "LPWAN links edge nodes to gateways/fog with low-power sparse transmissions."
+            ],
+            fr: [
+              "Architecture hybride Edge-Fog-Cloud recommandee.",
+              "Edge: decisions locales immediates (eclairage/CVC).",
+              "Fog: aggregation et filtrage niveau batiment.",
+              "Cloud: analyses long terme et dashboards campus.",
+              "LPWAN relie noeuds edge aux gateways/fog en transmissions eparses basse conso."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case4-q6",
+          prompt: {
+            en: "Assess feasibility with KPI examples and propose improvements.",
+            fr: "Evaluer la faisabilite avec exemples de KPI et proposer des ameliorations."
+          },
+          correction: {
+            en: [
+              "Feasibility is high with private LoRaWAN + hybrid architecture.",
+              "Example KPIs: energy savings >25%, reliability >98%, response time <5s, battery consumption <5Wh/sensor/month.",
+              "Improvements: pilot in one floor first, add edge AI for predictive control, consider HaLow in interference-heavy zones."
+            ],
+            fr: [
+              "Faisabilite elevee avec LoRaWAN prive + architecture hybride.",
+              "Exemples KPI: economies energie >25%, fiabilite >98%, temps de reponse <5s, conso batterie <5Wh/capteur/mois.",
+              "Ameliorations: pilote sur un etage, IA edge pour controle predictif, considerer HaLow en zones tres brouillees."
+            ]
+          }
+        }
+      ],
+      architectureAscii: [
+        "[Sensors: Occupancy/Temp/Light (Edge Nodes)]",
+        "                |",
+        "          (LoRaWAN / ZigBee)",
+        "                |",
+        "       [Local Gateway / Fog Layer]",
+        "                |",
+        "         (IP Backhaul: Wi-Fi/Ethernet)",
+        "                |",
+        "            [Campus Cloud]",
+        "                |",
+        "      [Dashboards + Alerts + Reports]"
+      ].join("\n"),
+      schemaGraph: {
+        layout: { name: "breadthfirst" },
+        nodes: [
+          { id: "n1", label: "Edge Sensors\\nCO2 / Temp / Occupancy / Light" },
+          { id: "n2", label: "Local Mesh\\nZigBee / PAN" },
+          { id: "n3", label: "Private LPWAN\\nLoRaWAN Link" },
+          { id: "n4", label: "Gateway / Fog\\nAggregation + Filtering" },
+          { id: "n5", label: "Edge Logic\\nLocal Control <10s" },
+          { id: "n6", label: "Campus Cloud\\nStorage + Analytics" },
+          { id: "n7", label: "Dashboard + Alerts\\nOps & Reporting" }
+        ],
+        edges: [
+          { source: "n1", target: "n2", label: "room cluster" },
+          { source: "n2", target: "n4", label: "uplink" },
+          { source: "n1", target: "n3", label: "direct sparse uplink" },
+          { source: "n3", target: "n4", label: "gateway" },
+          { source: "n4", target: "n5", label: "local decisions" },
+          { source: "n4", target: "n6", label: "aggregated data" },
+          { source: "n6", target: "n7", label: "analytics/reporting" },
+          { source: "n5", target: "n7", label: "critical local alerts" }
+        ]
+      },
+      reasoning: {
+        en: [
+          "Map needs: energy optimization + comfort + privacy + low maintenance.",
+          "Convert to constraints: battery life, weak Wi-Fi zones, multi-floor propagation, budget.",
+          "Select protocol stack: private LoRaWAN primary + ZigBee local mesh where needed.",
+          "Adopt hybrid architecture: Edge/Fog for latency and Cloud for long-term intelligence.",
+          "Track feasibility through KPI table and iterate via pilot deployment."
+        ],
+        fr: [
+          "Mapper besoins: optimisation energie + confort + privacy + maintenance reduite.",
+          "Transformer en contraintes: autonomie, zones Wi-Fi faibles, propagation multi-etages, budget.",
+          "Selectionner stack protocolaire: LoRaWAN prive primaire + maillage ZigBee local si necessaire.",
+          "Adopter architecture hybride: Edge/Fog pour latence et Cloud pour intelligence long terme.",
+          "Suivre faisabilite via table KPI puis iterer avec pilote."
+        ]
+      },
+      chart: {
+        type: "bar",
+        title: "Case 4 KPI Targets vs Pilot",
+        labels: ["Energy Saving %", "Reliability %", "Response Time s (lower better)", "Battery Wh/month (lower better)"],
+        data: [29, 98.7, 3.8, 4.6]
+      }
+    },
+    {
+      id: "iot-c1-case-5",
+      title: "Case Study 1: Smart Energy Management in a University Campus Building",
+      context: {
+        en: "In a large university campus like CESI, one main building faces frequent energy inefficiency. Classrooms can stay overheated or over-lit even when unoccupied. The task force must deploy an IoT solution for monitoring and automation using occupancy, temperature, and lighting data with battery-powered sensors.",
+        fr: "Dans un grand campus universitaire comme CESI, un batiment principal subit une inefficacite energetique frequente. Les salles peuvent rester surchauffees ou sur-eclairees meme inoccupes. La task force doit deployer une solution IoT de monitoring et d automatisation avec donnees d occupation, temperature et eclairage sur capteurs batterie."
+      },
+      objectives: {
+        en: [
+          "Optimize energy usage with real-time occupancy/temperature/lighting visibility.",
+          "Keep sparse telemetry plan (about one update every 15 minutes).",
+          "Cover multiple floors and adjacent outdoor zones.",
+          "Integrate with existing alerting and reporting tools."
+        ],
+        fr: [
+          "Optimiser l energie avec visibilite temps reel occupation/temperature/eclairage.",
+          "Garder une telemetrie eparse (environ une mise a jour toutes les 15 minutes).",
+          "Couvrir plusieurs etages et zones exterieures adjacentes.",
+          "S integrer aux systemes existants d alertes et de rapports."
+        ]
+      },
+      constraints: {
+        en: [
+          "Limited Wi-Fi coverage in some zones.",
+          "Infrastructure budget constraints.",
+          "Privacy sensitivity for student movement data.",
+          "Long-term sustainability target: battery life >2 years.",
+          "Need lower latency for local control while preserving cloud analytics."
+        ],
+        fr: [
+          "Couverture Wi-Fi limitee dans certaines zones.",
+          "Contraintes de budget infrastructure.",
+          "Sensibilite vie privee pour les mouvements etudiants.",
+          "Objectif durabilite: autonomie batterie >2 ans.",
+          "Besoin de faible latence locale tout en gardant analytics cloud."
+        ]
+      },
+      questions: [
+        {
+          id: "iot-c1-case5-q1",
+          prompt: {
+            en: "Identify the key requirements and constraints for this IoT deployment.",
+            fr: "Identifier les exigences et contraintes cles de ce deploiement IoT."
+          },
+          correction: {
+            en: [
+              "Requirements: real-time occupancy/temperature/lighting monitoring, sparse updates, battery life >2 years, multi-floor coverage, integration with alert/reporting systems, and campus scalability.",
+              "Constraints: limited Wi-Fi/interference zones, budget limits, privacy for occupancy data, battery-only optimization, and indoor propagation challenges through walls/floors.",
+              "Example: basement sensors need better penetration and robust link planning."
+            ],
+            fr: [
+              "Exigences: monitoring temps reel occupation/temperature/eclairage, mises a jour eparses, batterie >2 ans, couverture multi-etages, integration alertes/rapports, et scalabilite campus.",
+              "Contraintes: zones Wi-Fi limitees/interferences, budget, vie privee des donnees d occupation, optimisation batterie, et propagation indoor difficile a travers murs/etages.",
+              "Exemple: capteurs en sous-sol exigent meilleure penetration et plan de liaison robuste."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case5-q2",
+          prompt: {
+            en: "Classify suitable IoT network families (PAN, LPWAN, WLAN, Cellular) and explain why each is or is not appropriate.",
+            fr: "Classer les familles reseau IoT adaptees (PAN, LPWAN, WLAN, Cellulaire) et expliquer pourquoi chacune est adaptee ou non."
+          },
+          correction: {
+            en: [
+              "PAN (BLE/ZigBee): good for short-range dense indoor sensors and low power; limited for whole building + outdoor without relays.",
+              "LPWAN (LoRaWAN/Sigfox): strong fit for sparse low-data battery links over large area; private LoRaWAN helps cost/privacy control.",
+              "WLAN (Wi-Fi): good for high-data gateway backhaul but too power-hungry for many battery endpoints in congested zones.",
+              "Cellular (NB-IoT/LTE-M): strong coverage/penetration, but operator dependency and recurring fees can hurt budget for dense static sensors."
+            ],
+            fr: [
+              "PAN (BLE/ZigBee): bon pour capteurs denses indoor courte portee et faible conso; limite pour tout le batiment + exterieur sans relais.",
+              "LPWAN (LoRaWAN/Sigfox): tres adapte aux liens batterie faibles donnees sur large zone; LoRaWAN prive aide cout/privacy.",
+              "WLAN (Wi-Fi): utile pour backhaul de passerelles a haut debit mais trop energivore pour de nombreux endpoints batterie en zones congestionnees.",
+              "Cellulaire (NB-IoT/LTE-M): bonne couverture/penetration, mais dependance operateur et couts recurrents peuvent penaliser le budget dense statique."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case5-q3",
+          prompt: {
+            en: "Propose a network topology for the multi-story structure and justify it.",
+            fr: "Proposer une topologie reseau pour la structure multi-etages et la justifier."
+          },
+          correction: {
+            en: [
+              "Recommended topology: hybrid mesh-star.",
+              "Mesh at floor/room level increases resilience through walls and supports dense sensor layouts.",
+              "Star aggregation at gateway level simplifies management, alerting, and campus integration."
+            ],
+            fr: [
+              "Topologie recommandee: hybride maillage-etoile.",
+              "Le maillage au niveau etage/salle augmente la resilence a travers les murs et supporte la densite de capteurs.",
+              "L aggregation en etoile au niveau passerelles simplifie gestion, alertes et integration campus."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case5-q4",
+          prompt: {
+            en: "Select and justify one primary IoT protocol for this deployment, based on typical MEMO-sheet characteristics.",
+            fr: "Selectionner et justifier un protocole IoT primaire pour ce deploiement, selon les caracteristiques typiques de la fiche MEMO."
+          },
+          correction: {
+            en: [
+              "Primary protocol choice: private LoRaWAN.",
+              "Typical strengths: long range, very low power, low data rate profile, bidirectional capability, and private deployment option.",
+              "Why it fits: sparse updates, battery goals, multi-floor/outdoor reach, and no mandatory operator subscription.",
+              "Comparison: ZigBee is strong for local mesh clusters; NB-IoT is robust but operator-cost dependent."
+            ],
+            fr: [
+              "Choix protocole primaire: LoRaWAN prive.",
+              "Forces typiques: longue portee, tres faible conso, profil faible debit, capacite bidirectionnelle, option reseau prive.",
+              "Pourquoi adapte: mises a jour eparses, objectif autonomie, portee multi-etages/exterieur, et pas d abonnement operateur obligatoire.",
+              "Comparaison: ZigBee est fort pour clusters mailles locaux; NB-IoT est robuste mais depend de couts operateur."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case5-q5",
+          prompt: {
+            en: "Explain the proposed Cloud/Edge/Fog architecture, including LTN/LPWAN positioning, and provide a textual schema.",
+            fr: "Expliquer l architecture Cloud/Edge/Fog proposee, incluant le positionnement LTN/LPWAN, et fournir un schema textuel."
+          },
+          correction: {
+            en: [
+              "Recommended architecture: Hybrid Edge-Fog-Cloud.",
+              "Edge handles immediate local controls (for example, occupancy-based HVAC/lighting actions).",
+              "Fog gateways aggregate/filter floor-level telemetry.",
+              "Cloud stores long-term history and campus analytics dashboards.",
+              "LTN/LPWAN positioning: low-throughput links from edge nodes to fog/gateway, with bidirectional control path."
+            ],
+            fr: [
+              "Architecture recommandee: Hybride Edge-Fog-Cloud.",
+              "Edge gere les controles locaux immediats (exemple: actions CVC/eclairage basees sur occupation).",
+              "Les passerelles fog aggregent/filtrent la telemetrie par etage.",
+              "Le cloud stocke l historique long terme et les dashboards analytiques campus.",
+              "Positionnement LTN/LPWAN: liens faible debit des noeuds edge vers fog/passerelles, avec chemin de controle bidirectionnel."
+            ]
+          }
+        },
+        {
+          id: "iot-c1-case5-q6",
+          prompt: {
+            en: "Assess feasibility with a Requirements -> Constraints -> KPIs approach and suggest improvements.",
+            fr: "Evaluer la faisabilite avec une approche Exigences -> Contraintes -> KPIs et proposer des ameliorations."
+          },
+          correction: {
+            en: [
+              "Feasibility is high: private LoRaWAN + hybrid architecture aligns with budget, power, and latency needs.",
+              "KPI examples: energy savings >25%, reliability >98%, response time <5s, battery usage <5Wh/sensor/month.",
+              "Improvement suggestions: phased pilot by floor, stronger privacy controls (anonymized occupancy), and edge AI for predictive maintenance."
+            ],
+            fr: [
+              "Faisabilite elevee: LoRaWAN prive + architecture hybride alignent budget, energie et latence.",
+              "Exemples KPI: economies energie >25%, fiabilite >98%, temps de reponse <5s, conso batterie <5Wh/capteur/mois.",
+              "Ameliorations: pilote progressif par etage, renforcement privacy (occupation anonymisee), et IA edge pour maintenance predictive."
+            ]
+          }
+        }
+      ],
+      architectureAscii: [
+        "[Sensors (Occupancy/Temp/Light) - Edge Nodes]",
+        "                |",
+        "          (LTN / LPWAN Links)",
+        "                |",
+        "       [Local Gateway - Fog Layer]",
+        "                |",
+        "         (IP: Wi-Fi / Ethernet)",
+        "                |",
+        "           [Campus Cloud]",
+        "                |",
+        "   [Analytics + Reports + Alerts]"
+      ].join("\n"),
+      schemaGraph: {
+        layout: { name: "breadthfirst" },
+        nodes: [
+          { id: "se1", label: "Edge Sensors\\nOccupancy / Temp / Light" },
+          { id: "se2", label: "Indoor Mesh Segment\\nPAN (ZigBee/BLE)" },
+          { id: "se3", label: "Private LPWAN\\nLoRaWAN Low Throughput" },
+          { id: "se4", label: "Fog Gateway\\nAggregation + Buffering" },
+          { id: "se5", label: "Local Edge Rules\\nLow-latency Controls" },
+          { id: "se6", label: "Campus Cloud\\nStorage + Analytics" },
+          { id: "se7", label: "Alerts & Reports\\nExisting Systems" }
+        ],
+        edges: [
+          { source: "se1", target: "se2", label: "room-level sensing" },
+          { source: "se2", target: "se4", label: "mesh uplink" },
+          { source: "se1", target: "se3", label: "sparse uplink path" },
+          { source: "se3", target: "se4", label: "LPWAN gateway path" },
+          { source: "se4", target: "se5", label: "local decisions" },
+          { source: "se4", target: "se6", label: "filtered telemetry" },
+          { source: "se6", target: "se7", label: "dashboards/reporting" },
+          { source: "se5", target: "se7", label: "rapid local alerting" }
+        ]
+      },
+      reasoning: {
+        en: [
+          "Start from needs: energy optimization + comfort + privacy + battery longevity.",
+          "Map constraints: weak Wi-Fi, budget, multi-floor propagation, privacy controls.",
+          "Choose primary network: private LoRaWAN for sparse low-power coverage.",
+          "Add local topology: mesh where dense room-level sensing requires resilience.",
+          "Use hybrid architecture: Edge/Fog for reactivity, Cloud for campus-wide intelligence.",
+          "Validate with KPI table and iterate through pilot deployment."
+        ],
+        fr: [
+          "Partir des besoins: optimisation energie + confort + privacy + autonomie batterie.",
+          "Mapper les contraintes: Wi-Fi faible, budget, propagation multi-etages, controle privacy.",
+          "Choisir le reseau primaire: LoRaWAN prive pour couverture faible conso a donnees eparses.",
+          "Ajouter une topologie locale: maillage la ou la densite de capteurs demande resilence.",
+          "Utiliser une architecture hybride: Edge/Fog pour reactivite, Cloud pour intelligence campus.",
+          "Valider avec table KPI puis iterer via deploiement pilote."
+        ]
+      },
+      chart: {
+        type: "bar",
+        title: "Case Study Energy KPI - Targets vs Pilot",
+        labels: ["Energy Saving %", "Reliability %", "Response Time s", "Battery Wh/month"],
+        data: [27, 98.4, 4.2, 4.9]
+      }
     }
   ];
 
@@ -2300,7 +2736,7 @@
           {
             id: "iot-cours-1",
             name: "Cours 1 - Foundations",
-            description: "Easy/Medium/Hard blocks (100 QCM) + 3 case studies (smart classroom, outdoor campus, logistics).",
+            description: "Easy/Medium/Hard blocks (100 QCM) + multiple case studies (smart classroom, outdoor campus, logistics, smart energy).",
             blocks: [
               {
                 id: "iot-cours-1-easy-block-1",
