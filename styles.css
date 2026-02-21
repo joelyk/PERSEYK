@@ -646,6 +646,42 @@ body {
   margin: 6px 0 0 16px;
 }
 
+.case-tip {
+  margin: 6px 0 10px !important;
+  color: #3f5f67;
+  font-size: 13px;
+}
+
+.inline-schema-block {
+  margin-top: 12px;
+}
+
+.inline-schema-block h5 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #2f4f57;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.schema-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 8px;
+}
+
+.schema-ascii-toggle {
+  margin-top: 8px;
+}
+
+.schema-ascii-toggle summary {
+  cursor: pointer;
+  color: #1f5f66;
+  font-weight: 600;
+  font-size: 13px;
+}
+
 .ascii-diagram {
   margin: 0;
   border: 1px solid #d9e8e6;
@@ -669,6 +705,10 @@ body {
   height: 330px;
   border-radius: 8px;
   background: linear-gradient(180deg, #ffffff, #f3f8f7);
+}
+
+.inline-schema-block .schema-graph-canvas {
+  height: 280px;
 }
 
 @keyframes rise {

@@ -95,7 +95,7 @@
     missed: null
   };
   var caseStudyChart = null;
-  var caseStudySchemaGraph = null;
+  var caseStudySchemaGraphs = {};
 
   function escapeHtml(value) {
     return String(value || "")
@@ -144,11 +144,13 @@
     }
   }
 
-  function destroyCaseStudySchemaGraph() {
-    if (caseStudySchemaGraph) {
-      caseStudySchemaGraph.destroy();
-      caseStudySchemaGraph = null;
-    }
+  function destroyCaseStudySchemaGraphs() {
+    Object.keys(caseStudySchemaGraphs).forEach(function (graphKey) {
+      if (caseStudySchemaGraphs[graphKey]) {
+        caseStudySchemaGraphs[graphKey].destroy();
+      }
+    });
+    caseStudySchemaGraphs = {};
   }
 
   function findTheme(themeId) {
@@ -237,7 +239,7 @@
     }
     if (screen !== "case-study") {
       destroyCaseStudyChart();
-      destroyCaseStudySchemaGraph();
+      destroyCaseStudySchemaGraphs();
     }
     state.screen = screen;
     render();
@@ -884,22 +886,21 @@
     });
   }
 
-  function renderCaseStudySchema(caseStudy) {
-    if (typeof window.cytoscape === "undefined") {
-      return;
+  function isArchitectureQuestion(question) {
+    if (!question || !question.prompt) {
+      return false;
     }
 
-    destroyCaseStudySchemaGraph();
+    var combined = ((question.prompt.en || "") + " " + (question.prompt.fr || "")).toLowerCase();
+    return combined.indexOf("architecture") >= 0 ||
+      combined.indexOf("schema") >= 0 ||
+      combined.indexOf("diagram") >= 0 ||
+      combined.indexOf("ascii") >= 0 ||
+      combined.indexOf("topology") >= 0 ||
+      combined.indexOf("topologie") >= 0;
+  }
 
-    if (!caseStudy || !caseStudy.schemaGraph) {
-      return;
-    }
-
-    var container = document.getElementById("case-study-schema-graph");
-    if (!container) {
-      return;
-    }
-
+  function buildCaseStudySchemaElements(caseStudy) {
     var elements = [];
     var nodes = caseStudy.schemaGraph.nodes || [];
     var edges = caseStudy.schemaGraph.edges || [];
@@ -924,9 +925,17 @@
       });
     });
 
-    caseStudySchemaGraph = window.cytoscape({
+    return elements;
+  }
+
+  function createCaseStudySchemaGraph(container, caseStudy, graphKey) {
+    if (typeof window.cytoscape === "undefined" || !container || !caseStudy || !caseStudy.schemaGraph) {
+      return;
+    }
+
+    caseStudySchemaGraphs[graphKey] = window.cytoscape({
       container: container,
-      elements: elements,
+      elements: buildCaseStudySchemaElements(caseStudy),
       style: [
         {
           selector: "node",
@@ -970,6 +979,57 @@
         spacingFactor: 1.2
       }
     });
+  }
+
+  function renderCaseStudyQuestionSchemas(caseStudy) {
+    destroyCaseStudySchemaGraphs();
+
+    if (typeof window.cytoscape === "undefined" || !caseStudy || !caseStudy.schemaGraph) {
+      return;
+    }
+
+    (caseStudy.questions || []).forEach(function (question) {
+      if (!state.caseAnswerOpen[question.id] || !isArchitectureQuestion(question)) {
+        return;
+      }
+
+      var container = document.getElementById("case-study-schema-graph-" + question.id);
+      if (!container) {
+        return;
+      }
+
+      createCaseStudySchemaGraph(container, caseStudy, question.id);
+    });
+  }
+
+  function handleSchemaZoom(action, graphId) {
+    var graph = caseStudySchemaGraphs[graphId];
+    if (!graph) {
+      return;
+    }
+
+    var currentZoom = graph.zoom();
+    var center = { x: graph.width() / 2, y: graph.height() / 2 };
+
+    if (action === "schema-zoom-in") {
+      graph.zoom({
+        level: Math.min(graph.maxZoom(), currentZoom * 1.2),
+        renderedPosition: center
+      });
+      return;
+    }
+
+    if (action === "schema-zoom-out") {
+      graph.zoom({
+        level: Math.max(graph.minZoom(), currentZoom / 1.2),
+        renderedPosition: center
+      });
+      return;
+    }
+
+    if (action === "schema-zoom-reset") {
+      graph.fit(undefined, 24);
+    }
   }
 
   function renderCaseStudy() {
@@ -1016,6 +1076,23 @@
             return "<li>" + escapeHtml(line) + "</li>";
           })
           .join("");
+        var showInlineSchema = isOpen && caseStudy.schemaGraph && isArchitectureQuestion(question);
+        var inlineSchemaMarkup = showInlineSchema
+          ? "<section class=\"inline-schema-block\">" +
+            "<h5>Architecture Schema (JS Graph)</h5>" +
+            "<div class=\"schema-controls\">" +
+            "<button class=\"btn secondary small\" data-action=\"schema-zoom-out\" data-graph-id=\"" + escapeHtml(question.id) + "\">Reduire (-)</button>" +
+            "<button class=\"btn secondary small\" data-action=\"schema-zoom-in\" data-graph-id=\"" + escapeHtml(question.id) + "\">Augmenter (+)</button>" +
+            "<button class=\"btn secondary small\" data-action=\"schema-zoom-reset\" data-graph-id=\"" + escapeHtml(question.id) + "\">Recentrer</button>" +
+            "</div>" +
+            "<div class=\"schema-graph-wrap\"><div id=\"case-study-schema-graph-" + escapeHtml(question.id) + "\" class=\"schema-graph-canvas\"></div></div>" +
+            (caseStudy.architectureAscii
+              ? "<details class=\"schema-ascii-toggle\"><summary>Voir schema ASCII</summary><pre class=\"ascii-diagram\">" +
+                escapeHtml(caseStudy.architectureAscii) +
+                "</pre></details>"
+              : "") +
+            "</section>"
+          : "";
 
         return (
           "<article class=\"case-question-card\">" +
@@ -1037,7 +1114,9 @@
               correctionEn +
               "</ul><p><span class=\"lang-chip\">FR</span></p><ul>" +
               correctionFr +
-              "</ul></div>"
+              "</ul>" +
+              inlineSchemaMarkup +
+              "</div>"
             : "") +
           "</article>"
         );
@@ -1054,18 +1133,6 @@
         return "<li>" + escapeHtml(item) + "</li>";
       })
       .join("");
-
-    var schemaSectionMarkup = caseStudy.schemaGraph
-      ? "<section class=\"case-block\"><h3>Architecture Schema (JS Graph)</h3><div class=\"schema-graph-wrap\"><div id=\"case-study-schema-graph\" class=\"schema-graph-canvas\"></div></div></section>"
-      : "<section class=\"case-block\"><h3>Textual Architecture (ASCII)</h3><pre class=\"ascii-diagram\">" +
-        escapeHtml(caseStudy.architectureAscii || "") +
-        "</pre></section>";
-
-    var asciiOptionalMarkup = caseStudy.schemaGraph && caseStudy.architectureAscii
-      ? "<section class=\"case-block\"><h3>Textual Architecture (ASCII)</h3><pre class=\"ascii-diagram\">" +
-        escapeHtml(caseStudy.architectureAscii || "") +
-        "</pre></section>"
-      : "";
 
     appRoot.innerHTML =
       "<section class=\"panel\">" +
@@ -1104,20 +1171,19 @@
       "<div class=\"spacer-20\"></div>" +
       "<section class=\"case-block\">" +
       "<h3>Questions & Corrections</h3>" +
+      "<p class=\"case-tip\">Pour les questions architecture/schema, ouvre la correction pour afficher le schema JS juste dessous.</p>" +
       "<div class=\"case-question-list\">" +
       questionsMarkup +
       "</div>" +
       "</section>" +
       "<div class=\"spacer-20\"></div>" +
       "<div class=\"case-grid\">" +
-      schemaSectionMarkup +
       "<section class=\"case-block\"><h3>Reasoning Path</h3><p><span class=\"lang-chip\">EN</span></p><ul>" +
       reasoningEn +
       "</ul><p><span class=\"lang-chip\">FR</span></p><ul>" +
       reasoningFr +
       "</ul></section>" +
       "</div>" +
-      (asciiOptionalMarkup ? "<div class=\"spacer-20\"></div><div class=\"case-grid\">" + asciiOptionalMarkup + "</div>" : "") +
       "<div class=\"spacer-20\"></div>" +
       "<section class=\"case-block\">" +
       "<h3>Case KPI Chart</h3>" +
@@ -1125,7 +1191,7 @@
       "</section>" +
       "</section>";
 
-    renderCaseStudySchema(caseStudy);
+    renderCaseStudyQuestionSchemas(caseStudy);
     renderCaseStudyChart(caseStudy);
   }
 
@@ -1373,6 +1439,14 @@
       if (questionId) {
         state.caseAnswerOpen[questionId] = !state.caseAnswerOpen[questionId];
         renderCaseStudy();
+      }
+      return;
+    }
+
+    if (action === "schema-zoom-in" || action === "schema-zoom-out" || action === "schema-zoom-reset") {
+      var graphId = trigger.getAttribute("data-graph-id");
+      if (graphId) {
+        handleSchemaZoom(action, graphId);
       }
       return;
     }
