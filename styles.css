@@ -295,6 +295,31 @@ body {
   font-size: 14px;
 }
 
+.usecase-card {
+  margin-top: 10px;
+  border: 1px solid #cfdcdd;
+  border-radius: 12px;
+  background: #f4f8f8;
+  padding: 10px;
+}
+
+.usecase-title {
+  margin: 0 0 6px;
+  color: #35535d;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.usecase-card p {
+  margin: 0;
+}
+
+.usecase-card p + p {
+  margin-top: 6px;
+}
+
 .option-grid {
   margin-top: 14px;
   display: grid;

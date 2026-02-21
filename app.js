@@ -4,6 +4,64 @@
   var userPanel = document.getElementById("user-panel");
   var siteNameNode = document.getElementById("site-name");
   var data = window.PERSYK_DATA || { siteName: "PERSEYK", themes: [] };
+  var USE_CASE_CATALOG = {
+    1: {
+      en: "HD video surveillance on company/campus premises.",
+      fr: "Surveillance video HD sur locaux entreprise/campus."
+    },
+    2: {
+      en: "Smartwatch or wearable linked to a smartphone (short range).",
+      fr: "Montre connectee ou wearable relie au smartphone (courte portee)."
+    },
+    3: {
+      en: "Nationwide vehicle tracking with mobility and two-way exchange.",
+      fr: "Suivi vehicules a l echelle nationale avec mobilite et bidirectionnel."
+    },
+    4: {
+      en: "Home automation with many battery sensors in local network.",
+      fr: "Domotique avec nombreux capteurs batterie en reseau local."
+    },
+    5: {
+      en: "Low-value parcel tracking, sparse messages, max autonomy.",
+      fr: "Suivi colis faible valeur, messages rares, autonomie maximale."
+    },
+    6: {
+      en: "Bridge/tunnel infrastructure monitoring in harsh environments.",
+      fr: "Surveillance d infrastructures ponts/tunnels en environnement difficile."
+    },
+    7: {
+      en: "Mall proximity beacons/promotions toward smartphones.",
+      fr: "Balises de proximite en centre commercial vers smartphones."
+    },
+    8: {
+      en: "Sensors in isolated protected natural areas.",
+      fr: "Capteurs en zones naturelles protegees et isolees."
+    },
+    9: {
+      en: "Office/campus building automation (lighting, HVAC, occupancy).",
+      fr: "Automatisation batiment bureau/campus (eclairage, CVC, occupation)."
+    },
+    10: {
+      en: "Portable medical device with secure monitoring and mobility.",
+      fr: "Dispositif medical portable avec suivi securise et mobilite."
+    },
+    11: {
+      en: "Voice-activated home assistant with continuous internet usage.",
+      fr: "Assistant vocal domestique avec usage internet permanent."
+    },
+    12: {
+      en: "Rural soil moisture monitoring across large fields.",
+      fr: "Suivi humidite des sols en zone rurale sur grandes surfaces."
+    },
+    13: {
+      en: "Intrusion detectors in isolated buildings with one-off alerts.",
+      fr: "Detecteurs intrusion en batiments isoles avec alertes ponctuelles."
+    },
+    14: {
+      en: "Automatic meter reading with deep indoor penetration needs.",
+      fr: "Releve automatique de compteurs avec forte penetration indoor."
+    }
+  };
 
   if (siteNameNode) {
     siteNameNode.textContent = data.siteName || "PERSEYK";
@@ -196,6 +254,51 @@
       fr: "Cette option est incorrecte pour cette question.",
       en: "This option is incorrect for this question."
     };
+  }
+
+  function detectUseCaseId(question) {
+    if (!question || !question.prompt) {
+      return null;
+    }
+
+    var combined = ((question.prompt.en || "") + " " + (question.prompt.fr || "")).toLowerCase();
+    var patterns = [
+      /use case\s*(\d+)/i,
+      /cas d usage\s*(\d+)/i,
+      /cas\s*(\d+)/i
+    ];
+
+    for (var i = 0; i < patterns.length; i += 1) {
+      var match = combined.match(patterns[i]);
+      if (match && match[1]) {
+        return Number(match[1]);
+      }
+    }
+
+    return null;
+  }
+
+  function buildUseCaseContextMarkup(question) {
+    var useCaseId = detectUseCaseId(question);
+    if (!useCaseId || !USE_CASE_CATALOG[useCaseId]) {
+      return "";
+    }
+
+    var useCase = USE_CASE_CATALOG[useCaseId];
+
+    return (
+      "<section class=\"usecase-card\">" +
+      "<p class=\"usecase-title\">Use case " +
+      useCaseId +
+      "</p>" +
+      "<p><span class=\"lang-chip\">EN</span>" +
+      escapeHtml(useCase.en) +
+      "</p>" +
+      "<p><span class=\"lang-chip\">FR</span>" +
+      escapeHtml(useCase.fr) +
+      "</p>" +
+      "</section>"
+    );
   }
 
   function buildResolvedExplanationMarkup(question) {
@@ -616,6 +719,7 @@
     }
 
     var resolvedExplanationMarkup = buildResolvedExplanationMarkup(question);
+    var useCaseContextMarkup = buildUseCaseContextMarkup(question);
 
     var nextButtonMarkup = state.questionResolved
       ? "<div class=\"btn-row\" style=\"margin-top: 12px;\"><button class=\"btn primary\" data-action=\"next-question\">Question suivante</button></div>"
@@ -649,6 +753,7 @@
       "<p class=\"question-subtitle\">" +
       escapeHtml(question.prompt.en || "") +
       "</p>" +
+      useCaseContextMarkup +
       "<p class=\"attempt-status\">Tentatives restantes: " +
       attemptsLeft +
       " / 2</p>" +
